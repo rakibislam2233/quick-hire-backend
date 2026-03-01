@@ -2,22 +2,35 @@ import { z } from 'zod';
 
 // ── Register ────────────────────────────────────────────────────────────────
 const register = z.object({
-  body: z.object({
-    fullName: z
-      .string({ error: 'Full name is required and must be a string' })
-      .min(1, 'Full name is required'),
-    email: z
-      .string({ error: 'Email is required and must be a string' })
-      .email('Invalid email format')
-      .transform(val => val.toLowerCase()),
-    password: z
-      .string({ error: 'Password is required and must be a string' })
-      .min(8, 'Password must be at least 8 characters long'),
-    role: z.enum(['USER', 'COMPANY']).optional().default('USER'),
-    companyName: z.string().optional(),
-    companyLocation: z.string().optional(),
-    companyIndustry: z.string().optional(),
-  }),
+  body: z
+    .object({
+      fullName: z
+        .string({ error: 'Full name is required and must be a string' })
+        .min(1, 'Full name is required'),
+      email: z
+        .string({ error: 'Email is required and must be a string' })
+        .email('Invalid email format')
+        .transform(val => val.toLowerCase()),
+      password: z
+        .string({ error: 'Password is required and must be a string' })
+        .min(8, 'Password must be at least 8 characters long'),
+      role: z.enum(['USER', 'COMPANY']).optional().default('USER'),
+      companyName: z.string().optional(),
+      companyLocation: z.string().optional(),
+      companyIndustry: z.string().optional(),
+    })
+    .refine(
+      data => {
+        if (data.role === 'COMPANY') {
+          return !!(data.companyName && data.companyLocation && data.companyIndustry);
+        }
+        return true;
+      },
+      {
+        message: 'Company name, location, and industry are required when role is COMPANY',
+        path: ['role'],
+      }
+    ),
 });
 
 // ── Login ───────────────────────────────────────────────────────────────────

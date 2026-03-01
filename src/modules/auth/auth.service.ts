@@ -60,6 +60,7 @@ const register = async (payload: IRegisterPayload) => {
       companyId = company.id;
     }
 
+    // Create user
     const newUser = await tx.user.create({
       data: {
         fullName,
@@ -70,7 +71,11 @@ const register = async (payload: IRegisterPayload) => {
         companyId,
       },
     });
-
+    // updated company owner
+    await tx.company.update({
+      where: { id: companyId! },
+      data: { ownerId: newUser?.id },
+    });
     return newUser;
   });
 

@@ -9,15 +9,16 @@ model User {
   role            UserRole   @default(USER)
   status          UserStatus @default(ACTIVE)
   isEmailVerified Boolean    @default(false)
-  
+
   // Company relationship (if user belongs to a company)
   companyId String?
-  company   Company? @relation(fields: [companyId], references: [id])
 
   // Relationships
-  jobs             Job[]             @relation("JobCreator")
-  applications     Application[]     @relation("UserApplications")
-  savedJobs        SavedJob[]        @relation("UserSavedJobs")
+  ownedCompanies Company[]     @relation("CompanyOwner")
+  company        Company?      @relation(fields: [companyId], references: [id])
+  jobs           Job[]         @relation("JobCreator")
+  applications   Application[] @relation("UserApplications")
+  savedJobs      SavedJob[]    @relation("UserSavedJobs")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,5 +1,5 @@
 model Company {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   name         String
   description  String?
   website      String?
@@ -8,20 +8,22 @@ model Company {
   industry     String?
   contactEmail String?
   contactPhone String?
-  isVerified   Boolean  @default(false)
-  
+  isVerified   Boolean @default(false)
+  ownerId      String?
+
   // Frontend compatibility fields
-  founded        String?
-  employeeSize   String?  @map("employeeCount")
-  openPositions  Int      @default(0)
+  founded       String?
+  employeeSize  String? @map("employeeCount")
+  openPositions Int     @default(0)
 
   // Relationships
+  owner     User?    @relation("CompanyOwner", fields: [ownerId], references: [id])
   employees User[]
   jobs      Job[]    @relation("CompanyJobs")
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isDeleted Boolean  @default(false)
+  userId    String?
 
   @@map("companies")
 }
