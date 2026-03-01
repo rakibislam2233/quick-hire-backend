@@ -33,7 +33,7 @@ const createJob = async (creatorId: string, data: ICreateJobPayload) => {
 };
 
 // ── Get All Approved Jobs (Public) ────────────────────────────────────────────
-const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, string>) => {
+const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, unknown>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -79,7 +79,7 @@ const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, st
 // ── Get All Jobs for Admin (includes PENDING) ─────────────────────────────────
 const getAllJobsForAdmin = async (
   filters: IJobAdminFilterOptions,
-  options: Record<string, string>
+  options: Record<string, unknown>
 ) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);

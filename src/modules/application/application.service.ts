@@ -27,7 +27,7 @@ const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload)
 };
 
 // ── Get My Applications (Job Seeker) ──────────────────────────────────────────
-const getMyApplications = async (userId: string, options: Record<string, string>) => {
+const getMyApplications = async (userId: string, options: Record<string, unknown>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -45,11 +45,10 @@ const getMyApplications = async (userId: string, options: Record<string, string>
   return createPaginationResult(data, total, paginationOptions);
 };
 
-// ── Get Applications for a Job (Company) ─────────────────────────────────────
 const getApplicationsByJob = async (
   jobId: string,
   companyUserId: string,
-  options: Record<string, string>
+  options: Record<string, unknown>
 ) => {
   // Verify requester owns the job's company
   const job = await database.job.findUnique({ where: { id: jobId } });

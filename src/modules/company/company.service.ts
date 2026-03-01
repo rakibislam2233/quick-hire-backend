@@ -28,7 +28,10 @@ const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
 };
 
 // ── Get All Companies ─────────────────────────────────────────────────────────
-const getAllCompanies = async (filters: ICompanyFilterOptions, options: Record<string, string>) => {
+const getAllCompanies = async (
+  filters: ICompanyFilterOptions,
+  options: Record<string, unknown>
+) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -51,7 +54,7 @@ const getAllCompanies = async (filters: ICompanyFilterOptions, options: Record<s
   if (Object.keys(filterData).length > 0) {
     andConditions.push(
       ...Object.keys(filterData).map(key => ({
-        [key]: { equals: filterData[key] },
+        [key]: { equals: (filterData as Record<string, unknown>)[key] },
       }))
     );
   }

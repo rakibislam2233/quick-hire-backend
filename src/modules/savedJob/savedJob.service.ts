@@ -29,7 +29,7 @@ const toggleSaveJob = async (userId: string, jobId: string): Promise<IToggleSave
 };
 
 // ── Get My Saved Jobs ─────────────────────────────────────────────────────────
-const getSavedJobs = async (userId: string, options: Record<string, string>) => {
+const getSavedJobs = async (userId: string, options: Record<string, unknown>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
