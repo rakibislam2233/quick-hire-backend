@@ -14,6 +14,12 @@ export interface ICreateJobPayload {
 }
 
 // ── Update Job ─────────────────────────────────────────────────────────────────
+export interface IUpdateJobPayload {
+  title?: string;
+  description?: string;
+  requirements?: string;
+  responsibilities?: string;
+  salaryRange?: string;
   location?: string;
   type?: string;
   categoryId?: string;
