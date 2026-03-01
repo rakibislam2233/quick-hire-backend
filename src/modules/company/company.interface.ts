@@ -8,6 +8,8 @@ export interface ICreateCompanyPayload {
   industry?: string;
   contactEmail?: string;
   contactPhone?: string;
+  founded?: string;
+  employeeSize?: string;
 }
 
 // ── Update Company ─────────────────────────────────────────────────────────────
@@ -21,6 +23,8 @@ export interface IUpdateCompanyPayload {
   contactEmail?: string;
   contactPhone?: string;
   isVerified?: boolean;
+  founded?: string;
+  employeeSize?: string;
 }
 
 // ── Filter Options ─────────────────────────────────────────────────────────────

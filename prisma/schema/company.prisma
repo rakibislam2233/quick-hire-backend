@@ -9,6 +9,11 @@ model Company {
   contactEmail String?
   contactPhone String?
   isVerified   Boolean  @default(false)
+  
+  // Frontend compatibility fields
+  founded        String?
+  employeeSize   String?  @map("employeeCount")
+  openPositions  Int      @default(0)
 
   // Relationships
   employees User[]

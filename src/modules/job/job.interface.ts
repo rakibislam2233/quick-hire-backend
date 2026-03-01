@@ -20,7 +20,9 @@ export interface IUpdateJobPayload {
   responsibilities?: string;
   salaryRange?: string;
   location?: string;
-  type?: JobType;
+  type?: string;
+  category?: string;
+  tags?: string[];
 }
 
 // ── Filter Options (Public) ────────────────────────────────────────────────────

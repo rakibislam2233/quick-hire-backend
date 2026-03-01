@@ -10,6 +10,8 @@ export interface IRegisterPayload {
   companyName?: string;
   companyLocation?: string;
   companyIndustry?: string;
+  companyFounded?: string;
+  companyEmployeeSize?: string;
 }
 
 export interface ILoginPayload {
