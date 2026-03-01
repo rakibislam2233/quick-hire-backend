@@ -72,7 +72,7 @@ router.post('/logout', validateRequest(AuthValidations.logout), AuthController.l
 
 router.post(
   '/change-password',
-  auth(UserRole.STUDENT, UserRole.CR, UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  auth(UserRole.USER, UserRole.ADMIN, UserRole.COMPANY),
   validateRequest(AuthValidations.changePassword),
   AuthController.changePassword
 );

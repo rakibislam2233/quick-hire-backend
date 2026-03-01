@@ -6,9 +6,8 @@ import pick from '../../utils/pick.utils';
 import sendResponse from '../../utils/sendResponse';
 import { UserService } from './user.service';
 
-// Get all users
+// ── Get All Users (Admin) ──────────────────────────────────────────────────────
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  // Just pick filters and options, pass to service
   const filters = pick(req.query, [
     'fullName',
     'email',
@@ -31,12 +30,10 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get user by ID
+// ── Get User By ID (Admin) ─────────────────────────────────────────────────────
 const getUserById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const userId = Array.isArray(id) ? id[0] : id;
-
-  const user = await UserService.getUserById(userId);
+  const id = req.params.id as string;
+  const user = await UserService.getUserById(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -46,13 +43,10 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get user profile with academic info
+// ── Get My Profile ─────────────────────────────────────────────────────────────
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
-
-  if (!userId) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
-  }
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
 
   const userProfile = await UserService.getUserById(userId);
 
@@ -64,44 +58,10 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const createStudent = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.user;
-  const result = await UserService.createStudent(userId, req.body);
-
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: 'Student created successfully',
-    data: result,
-  });
-});
-
-const getAllStudents = catchAsync(async (req: Request, res: Response) => {
-  const { userId, batchId } = req.user;
-  const filters = pick(req.query, ['search', 'status']);
-  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
-  if (batchId) {
-    filters.batchId = batchId;
-    filters.crId = userId;
-  }
-  const users = await UserService.getAllStudents(filters, options);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Users fetched successfully',
-    meta: users.pagination,
-    data: users.data,
-  });
-});
-
-// Update my profile (self)
+// ── Update My Profile ──────────────────────────────────────────────────────────
 const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
-
-  if (!userId) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
-  }
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
 
   const result = await UserService.updateMyProfile(userId, req.body, req.file, req);
 
@@ -113,56 +73,10 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateInstitutionAndBatch = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.user;
-  if (!userId) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
-  }
-  // Parse JSON strings from form-data
-  let institutionInfo;
-  let batchInformation;
-
-  try {
-    const rawInstitutionInfo = JSON.parse(req.body.institutionInfo);
-    institutionInfo = institutionInfoSchema.parse(rawInstitutionInfo);
-  } catch (error: any) {
-    if (error instanceof SyntaxError) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'institutionInfo must be valid JSON');
-    }
-    throw new ApiError(httpStatus.BAD_REQUEST, error.message || 'Invalid institution info');
-  }
-
-  try {
-    const rawBatchInfo = JSON.parse(req.body.batchInformation);
-    batchInformation = batchInformationSchema.parse(rawBatchInfo);
-  } catch (error: any) {
-    if (error instanceof SyntaxError) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'batchInformation must be valid JSON');
-    }
-    throw new ApiError(httpStatus.BAD_REQUEST, error.message || 'Invalid batch info');
-  }
-
-  const parsedData = {
-    institutionInfo,
-    batchInformation,
-  };
-
-  const result = await UserService.updateInstitutionAndBatch(userId, parsedData, req.file, req);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Institution and batch updated successfully',
-    data: result,
-  });
-});
-
-// Update user
+// ── Update User (Admin) ────────────────────────────────────────────────────────
 const updateUser = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const userId = Array.isArray(id) ? id[0] : id;
-
-  const user = await UserService.updateUserById(userId, req.body);
+  const id = req.params.id as string;
+  const user = await UserService.updateUserById(id, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -172,12 +86,10 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Delete user
+// ── Delete User (Admin) ────────────────────────────────────────────────────────
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const userId = Array.isArray(id) ? id[0] : id;
-
-  await UserService.deleteUserById(userId);
+  const id = req.params.id as string;
+  await UserService.deleteUserById(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -186,12 +98,10 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// ── Delete My Profile ──────────────────────────────────────────────────────────
 const deleteMyProfile = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
-
-  if (!userId) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
-  }
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
 
   await UserService.deleteMyProfile(userId);
 
@@ -207,9 +117,6 @@ export const UserController = {
   getUserById,
   getUserProfile,
   updateMyProfile,
-  createStudent,
-  updateInstitutionAndBatch,
-  getAllStudents,
   updateUser,
   deleteUser,
   deleteMyProfile,
