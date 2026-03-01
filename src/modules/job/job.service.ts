@@ -20,7 +20,6 @@ const createJob = async (creatorId: string, data: any) => {
     data: {
       ...data,
       creatorId,
-      // Job starts as PENDING — Admin must approve
       status: 'PENDING',
     },
     include: { company: true },
