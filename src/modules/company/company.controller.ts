@@ -5,6 +5,7 @@ import pick from '../../utils/pick.utils';
 import sendResponse from '../../utils/sendResponse';
 import { CompanyService } from './company.service';
 
+// ── Create Company ────────────────────────────────────────────────────────────
 const createCompany = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
   const result = await CompanyService.createCompany(userId, req.body);
@@ -17,6 +18,7 @@ const createCompany = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// ── Get All Companies ─────────────────────────────────────────────────────────
 const getAllCompanies = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, ['search', 'location', 'industry', 'isVerified']);
   const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
@@ -32,8 +34,9 @@ const getAllCompanies = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// ── Get Company By ID ─────────────────────────────────────────────────────────
 const getCompanyById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await CompanyService.getCompanyById(id);
 
   sendResponse(res, {
@@ -44,8 +47,9 @@ const getCompanyById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// ── Update Company ────────────────────────────────────────────────────────────
 const updateCompany = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await CompanyService.updateCompany(id, req.body);
 
   sendResponse(res, {
@@ -56,8 +60,9 @@ const updateCompany = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// ── Delete Company ────────────────────────────────────────────────────────────
 const deleteCompany = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   await CompanyService.deleteCompany(id);
 
   sendResponse(res, {

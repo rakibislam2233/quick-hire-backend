@@ -1,134 +1,98 @@
 import httpStatus from 'http-status-codes';
-import { Company, Prisma } from '../../prisma/generated/client';
+import { Prisma } from '../../../prisma/generated/client';
+import { database } from '../../config/database.config';
 import ApiError from '../../utils/ApiError';
-import { paginationHelper } from '../../utils/paginationHelper';
+import {
+  createPaginationQuery,
+  createPaginationResult,
+  parsePaginationOptions,
+} from '../../utils/pagination.utils';
 
-const createCompany = async (userId: string, data: Prisma.CompanyCreateInput): Promise<Company> => {
-  const result = await prisma.company.create({
-    data,
-  });
+// ── Create Company ────────────────────────────────────────────────────────────
+const createCompany = async (userId: string, data: Prisma.CompanyCreateInput) => {
+  // Create the company record
+  const company = await database.company.create({ data });
 
-  // Link the creator to the company
-  await prisma.user.update({
+  // Link the creating user to this company and upgrade role to COMPANY
+  await database.user.update({
     where: { id: userId },
-    data: { companyId: result.id, role: 'COMPANY' },
+    data: { companyId: company.id, role: 'COMPANY' },
   });
 
-  return result;
+  return company;
 };
 
+// ── Get All Companies ─────────────────────────────────────────────────────────
 const getAllCompanies = async (filters: any, options: any) => {
-  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options);
+  const paginationOptions = parsePaginationOptions(options);
+  const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
   const { search, ...filterData } = filters;
 
-  const andConditions = [];
+  const andConditions: Prisma.CompanyWhereInput[] = [{ isDeleted: false }];
 
+  // Full-text search across name, location, industry
   if (search) {
     andConditions.push({
-      OR: ['name', 'location', 'industry'].map(field => ({
-        [field]: {
-          contains: search,
-          mode: 'insensitive',
-        },
-      })),
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { location: { contains: search, mode: 'insensitive' } },
+        { industry: { contains: search, mode: 'insensitive' } },
+      ],
     });
   }
 
+  // Exact match filters (e.g. isVerified)
   if (Object.keys(filterData).length > 0) {
-    andConditions.push({
-      AND: Object.keys(filterData).map(key => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
-    });
+    andConditions.push(
+      ...Object.keys(filterData).map(key => ({
+        [key]: { equals: filterData[key] },
+      }))
+    );
   }
 
-  const whereConditions: Prisma.CompanyWhereInput =
-    andConditions.length > 0 ? { AND: andConditions } : {};
+  const whereConditions: Prisma.CompanyWhereInput = { AND: andConditions };
 
-  const result = await prisma.company.findMany({
-    where: whereConditions,
-    skip,
-    take: limit,
-    orderBy: {
-      [sortBy]: sortOrder,
-    },
-    include: {
-      _count: {
-        select: {
-          jobs: true,
-        },
-      },
-    },
-  });
+  const [data, total] = await Promise.all([
+    database.company.findMany({
+      where: whereConditions,
+      skip,
+      take,
+      orderBy,
+      include: { _count: { select: { jobs: true } } },
+    }),
+    database.company.count({ where: whereConditions }),
+  ]);
 
-  const total = await prisma.company.count({
-    where: whereConditions,
-  });
-
-  return {
-    pagination: {
-      page,
-      limit,
-      total,
-    },
-    data: result,
-  };
+  return createPaginationResult(data, total, paginationOptions);
 };
 
-const getCompanyById = async (id: string): Promise<Company | null> => {
-  const result = await prisma.company.findUnique({
-    where: { id },
-    include: {
-      _count: {
-        select: {
-          jobs: true,
-        },
-      },
-    },
+// ── Get Company By ID ─────────────────────────────────────────────────────────
+const getCompanyById = async (id: string) => {
+  const company = await database.company.findUnique({
+    where: { id, isDeleted: false },
+    include: { _count: { select: { jobs: true } } },
   });
 
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
-  }
+  if (!company) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  return result;
+  return company;
 };
 
-const updateCompany = async (id: string, data: Prisma.CompanyUpdateInput): Promise<Company> => {
-  const isExist = await prisma.company.findUnique({
-    where: { id },
-  });
+// ── Update Company ────────────────────────────────────────────────────────────
+const updateCompany = async (id: string, data: Prisma.CompanyUpdateInput) => {
+  const isExist = await database.company.findUnique({ where: { id, isDeleted: false } });
+  if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
-  }
-
-  const result = await prisma.company.update({
-    where: { id },
-    data,
-  });
-
-  return result;
+  return database.company.update({ where: { id }, data });
 };
 
-const deleteCompany = async (id: string): Promise<Company> => {
-  const isExist = await prisma.company.findUnique({
-    where: { id },
-  });
+// ── Soft Delete Company ───────────────────────────────────────────────────────
+const deleteCompany = async (id: string) => {
+  const isExist = await database.company.findUnique({ where: { id } });
+  if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
-  }
-
-  const result = await prisma.company.update({
-    where: { id },
-    data: { isDeleted: true },
-  });
-
-  return result;
+  return database.company.update({ where: { id }, data: { isDeleted: true } });
 };
 
 export const CompanyService = {
