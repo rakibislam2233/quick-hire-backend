@@ -6,6 +6,7 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { IToggleSaveJobResult } from './savedJob.interface';
 
 // ── Toggle Save / Unsave a Job ────────────────────────────────────────────────
 const toggleSaveJob = async (userId: string, jobId: string): Promise<IToggleSaveJobResult> => {

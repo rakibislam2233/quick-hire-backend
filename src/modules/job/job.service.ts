@@ -7,6 +7,12 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import {
+  ICreateJobPayload,
+  IJobAdminFilterOptions,
+  IJobFilterOptions,
+  IUpdateJobPayload,
+} from './job.interface';
 
 // ── Create/Post a Job ─────────────────────────────────────────────────────────
 const createJob = async (creatorId: string, data: ICreateJobPayload) => {
