@@ -75,7 +75,7 @@ const generateProfessionalEmailTemplate = (
       font-size: 32px;
       font-weight: 800;
       letter-spacing: 8px;
-      color: #2456C4;
+      color: #4640DE;
       text-align: center;
       padding: 24px;
       background: #F1F5F9;
@@ -108,7 +108,7 @@ const generateProfessionalEmailTemplate = (
 
     .button {
       display: inline-block;
-      background: #2456C4;
+      background: #4640DE;
       color: #FFFFFF !important;
       padding: 14px 32px;
       text-decoration: none;
@@ -180,7 +180,7 @@ const generateProfessionalEmailTemplate = (
     }
 
     .footer a {
-      color: #2456C4;
+      color: #4640DE;
       text-decoration: none;
     }
 
@@ -205,7 +205,7 @@ const generateProfessionalEmailTemplate = (
           <!-- Logo -->
           <tr>
             <td class="logo-section">
-              <img src="${logoUrl}" alt="quick-hire Logo">
+              <img src="${logoUrl}" alt="QuickHire Logo">
             </td>
           </tr>
 
@@ -221,13 +221,13 @@ const generateProfessionalEmailTemplate = (
             <td class="footer">
               <div class="social-links">
                 <a href="https://facebook.com/quick-hire" class="social-icon">
-                  <img src="https://img.icons8.com/ios-filled/50/2456C4/facebook-new.png" alt="Facebook">
+                  <img src="https://img.icons8.com/ios-filled/50/4640DE/facebook-new.png" alt="Facebook">
                 </a>
                 <a href="https://instagram.com/quick-hire" class="social-icon">
-                  <img src="https://img.icons8.com/ios-filled/50/2456C4/instagram-new.png" alt="Instagram">
+                  <img src="https://img.icons8.com/ios-filled/50/4640DE/instagram-new.png" alt="Instagram">
                 </a>
                 <a href="https://linkedin.com/company/quick-hire" class="social-icon">
-                  <img src="https://img.icons8.com/ios-filled/50/2456C4/linkedin.png" alt="LinkedIn">
+                  <img src="https://img.icons8.com/ios-filled/50/4640DE/linkedin.png" alt="LinkedIn">
                 </a>
               </div>
 
@@ -235,7 +235,7 @@ const generateProfessionalEmailTemplate = (
                 <a href="https://quick-hire.app">www.quick-hire.app</a> | <a href="mailto:support@quick-hire.app">support@quick-hire.app</a>
               </p>
               <p style="margin: 0;">
-                © ${new Date().getFullYear()} quick-hire. All rights reserved.
+                © ${new Date().getFullYear()} QuickHire. All rights reserved.
               </p>
             </td>
           </tr>
@@ -268,35 +268,35 @@ const generateButton = (text: string, url: string) => `
 // ──────────────────────────────────────────────
 // Email Functions (all in English)
 export const sendWelcomeEmail = async (to: string, name: string): Promise<void> => {
-  const subject = 'Welcome to Your CR!';
+  const subject = 'Welcome to QuickHire!';
   const content = `
     <h1>Welcome, ${name}!</h1>
-    <p>You're now part of Your CR — the centralized platform for class representatives and students to manage everything in one place.</p>
+    <p>You're now part of QuickHire — the most efficient way to connect with top job opportunities and hire the best talent.</p>
     ${generateHighlightBox(`
-      <p><strong>What you can do on Your CR:</strong></p>
+      <p><strong>What you can do on QuickHire:</strong></p>
       <ul style="padding-left:24px; margin:16px 0;">
-        <li>Share class notices, routines, and assignments</li>
-        <li>Communicate quickly with students</li>
-        <li>Track attendance and results</li>
-        <li>Manage college/polytechnic/university events & group chats</li>
+        <li>Create a professional profile and upload your resume</li>
+        <li>Browse and apply for top job opportunities</li>
+        <li>Track your application status in real-time</li>
+        <li>Get personalized job alerts based on your skills</li>
       </ul>
     `)}
-    <p>Get started right away!</p>
-    ${generateButton('Go to Dashboard', 'https://quick-hire.app/dashboard')}
+    <p>Ready to launch your next career move?</p>
+    ${generateButton('Explore Jobs', 'https://quick-hire.app/jobs')}
   `;
 
   const html = generateProfessionalEmailTemplate(content, {
-    title: 'Welcome to Your CR',
-    preheader: `Hi ${name}, your class management journey starts now!`,
+    title: 'Welcome to QuickHire',
+    preheader: `Hi ${name}, your career journey starts now with QuickHire!`,
   });
 
   await addEmailToQueue({ to, subject, html });
 };
 
 export const sendVerificationEmail = async (to: string, otp: string): Promise<void> => {
-  const subject = 'Verify Your Email – Your OTP Code';
+  const subject = 'Verify Your Email – QuickHire';
   const content = `
-    <p>Thank you for signing up! Please use the code below to verify your email address:</p>
+    <p>Thank you for signing up for QuickHire! Please use the code below to verify your email address:</p>
     ${generateOTPSection(otp, 15)}
     <p style="color:var(--muted); font-size:14px;">If you didn’t request this, you can safely ignore this email.</p>
   `;
@@ -343,74 +343,74 @@ export const sendOTPEmail = async (to: string, otp: string): Promise<void> => {
 };
 
 // ──────────────────────────────────────────────
-// CR Registration Emails
-export const sendPendingCRRegistrationEmail = async (
+// Company Registration Emails
+export const sendPendingCompanyRegistrationEmail = async (
   to: string,
   name: string,
-  institutionName: string
+  companyName: string
 ): Promise<void> => {
-  const subject = 'CR Registration Received – Pending Approval';
+  const subject = 'Company Profile Under Review – QuickHire';
   const content = `
     <p>Hi <strong>${name}</strong>,</p>
-    <p>Thank you for registering as a Class Representative for <strong>${institutionName}</strong>. Your registration is currently under review.</p>
+    <p>Thank you for registering <strong>${companyName}</strong> on QuickHire. Your profile is currently under review by our admin team.</p>
     ${generateHighlightBox(`
       <p><strong>Registration Details:</strong></p>
       <ul style="padding-left:24px; margin:16px 0;">
-        <li>Institution: ${institutionName}</li>
+        <li>Company: ${companyName}</li>
         <li>Status: <span class="status-badge status-pending">Pending</span></li>
       </ul>
     `)}
-    <p>You will receive another email once your registration is approved or rejected.</p>
-    <p style="color: #6b7280; font-size: 14px;">This usually takes 1-2 business days.</p>
+    <p>We'll notify you once your profile has been verified.</p>
+    <p style="color: #6b7280; font-size: 14px;">Verification usually takes 1-2 business days.</p>
   `;
 
   const html = generateProfessionalEmailTemplate(content, {
-    title: 'CR Registration Pending',
-    preheader: `Your CR registration for ${institutionName} is under review`,
+    title: 'Registration Pending',
+    preheader: `Your company registration for ${companyName} is under review`,
   });
 
   await addEmailToQueue({ to, subject, html });
 };
 
-export const sendCRRegistrationApprovedEmail = async (
+export const sendCompanyRegistrationApprovedEmail = async (
   to: string,
   name: string,
-  institutionName: string
+  companyName: string
 ): Promise<void> => {
-  const subject = 'Your CR Registration has been Approved! 🎉';
+  const subject = 'Your Company Profile has been Approved! 🎊';
   const content = `
-    <p>Congratulations <strong>${name}</strong>,</p>
-    <p>Your Class Representative registration for <strong>${institutionName}</strong> has been <span class="status-badge status-approved">Approved</span>.</p>
+    <p>Great news <strong>${name}</strong>,</p>
+    <p>Your company profile for <strong>${companyName}</strong> has been <span class="status-badge status-approved">Approved</span>.</p>
     ${generateHighlightBox(`
-      <p><strong>Next Steps:</strong></p>
+      <p><strong>What's Next:</strong></p>
       <ul style="padding-left:24px; margin:16px 0;">
-        <li>Your dashboard is now fully unlocked.</li>
-        <li>You can now start managing your class students and notices.</li>
-        <li>Access routines, assessments, and attendance modules.</li>
+        <li>You can now post job listings to our platform.</li>
+        <li>Browse and manage applications from top candidates.</li>
+        <li>Access your company analytics dashboard.</li>
       </ul>
     `)}
-    <p>Ready to lead your batch? Click below to get started.</p>
-    ${generateButton('Go to Dashboard', 'https://quick-hire.app/dashboard')}
+    <p>Ready to build your team? Click below to post your first job.</p>
+    ${generateButton('Post a Job', 'https://quick-hire.app/dashboard/jobs/new')}
   `;
 
   const html = generateProfessionalEmailTemplate(content, {
     title: 'Registration Approved',
-    preheader: `Your CR registration for ${institutionName} has been approved. Welcome aboard!`,
+    preheader: `Your company ${companyName} has been approved on QuickHire.`,
   });
 
   await addEmailToQueue({ to, subject, html });
 };
 
-export const sendCRRegistrationRejectedEmail = async (
+export const sendCompanyRegistrationRejectedEmail = async (
   to: string,
   name: string,
-  institutionName: string,
+  companyName: string,
   reason?: string
 ): Promise<void> => {
-  const subject = 'CR Registration Rejected – Action Required';
+  const subject = 'Company Profile Verification Update';
   const content = `
     <p>Hi <strong>${name}</strong>,</p>
-    <p>We regret to inform you that your Class Representative registration for <strong>${institutionName}</strong> has been <span class="status-badge status-rejected">Rejected</span>.</p>
+    <p>We've reviewed your company profile for <strong>${companyName}</strong> and unfortunately, we couldn't approve it at this time (<span class="status-badge status-rejected">Rejected</span>).</p>
     ${
       reason
         ? generateHighlightBox(`
@@ -419,48 +419,46 @@ export const sendCRRegistrationRejectedEmail = async (
     `)
         : ''
     }
-    <p>If you wish to re-submit your registration with corrected information, please log in to your account and update your details.</p>
-    ${generateButton('Update Registration', 'https://quick-hire.app/cr-registration/complete')}
-    <p style="color: #64748B; font-size: 14px; margin-top: 24px;">Need help? Reply to this email or contact support.</p>
+    <p>Please update your profile details and re-submit for verification.</p>
+    ${generateButton('Update Profile', 'https://quick-hire.app/dashboard/company/edit')}
+    <p style="color: #64748B; font-size: 14px; margin-top: 24px;">Need assistance? Please contact our support team.</p>
   `;
 
   const html = generateProfessionalEmailTemplate(content, {
     title: 'Registration Rejected',
-    preheader: `Your CR registration for ${institutionName} was not approved.`,
+    preheader: `Action required for your company profile on QuickHire.`,
   });
 
   await addEmailToQueue({ to, subject, html });
 };
 
 // ──────────────────────────────────────────────
-// Student Created Email
-export const sendStudentCreatedEmail = async (
+// User Created Email
+export const sendUserCreatedEmail = async (
   to: string,
   name: string,
-  crName: string,
-  institutionName: string,
+  adminName: string,
   defaultPassword: string
 ): Promise<void> => {
-  const subject = 'Welcome to quick-hire – Account Created';
+  const subject = 'Welcome to QuickHire – Account Created';
   const content = `
     <p>Hi <strong>${name}</strong>,</p>
-    <p>Your account has been created on quick-hire by your Class Representative <strong>${crName}</strong> from <strong>${institutionName}</strong>. Your default password is <strong>${defaultPassword}</strong>. Please change your password after logging in.</p>
+    <p>Your QuickHire account has been created by <strong>${adminName}</strong>. Your default password is <strong>${defaultPassword}</strong>. Please change your password after logging in for the first time.</p>
     ${generateHighlightBox(`
       <p><strong>What you can do:</strong></p>
       <ul style="padding-left:24px; margin:16px 0;">
-        <li>View class notices and updates</li>
-        <li>Access class schedules and routines</li>
-        <li>Submit assessments and assignments</li>
-        <li>Report issues to your CR</li>
+        <li>Complete your profile to attract top employers</li>
+        <li>Search and apply for thousands of matching jobs</li>
+        <li>Manage your applications and interviews</li>
       </ul>
     `)}
-    <p>You can now log in and start using the platform.</p>
-    ${generateButton('Log In to quick-hire', 'https://quick-hire.app/login')}
+    <p>You can now log in and start your job search.</p>
+    ${generateButton('Log In to QuickHire', 'https://quick-hire.app/login')}
   `;
 
   const html = generateProfessionalEmailTemplate(content, {
-    title: 'Welcome to quick-hire',
-    preheader: `Your account has been created by ${crName}`,
+    title: 'Welcome to QuickHire',
+    preheader: `Your account has been created by ${adminName}`,
   });
 
   await addEmailToQueue({ to, subject, html });
@@ -482,10 +480,9 @@ export const getNotificationEmailHtml = (title: string, message: string, type: s
       badgeClass += ' badge-rejected'; // Red (Urgent/Important)
       typeLabel = 'Assessment';
       break;
-    case 'CLASS':
-    case 'CLASS_UPDATE':
+    case 'JOB_UPDATE':
       badgeClass += ' badge-approved'; // Green
-      typeLabel = 'Class Update';
+      typeLabel = 'Job Update';
       break;
     case 'ISSUE':
       badgeClass += ' badge-rejected';
