@@ -3,48 +3,24 @@ model User {
   fullName        String
   email           String     @unique
   password        String
-  phoneNumber     String
+  phoneNumber     String?
   profileImage    String?
   bio             String?
-  studentId       String?
-  dateOfBirth     DateTime?
-  lastLogin       DateTime   @default(now())
-  role            UserRole   @default(STUDENT)
+  role            UserRole   @default(USER)
   status          UserStatus @default(ACTIVE)
   isEmailVerified Boolean    @default(false)
 
-  // CR Specific Fields
-  isCr                   Boolean   @default(false)
-  crApprovedAt           DateTime?
-  isRegistrationComplete Boolean   @default(false)
-
-  crId          String?
-  institutionId String?
-
-  // Current batch 
-  currentBatchId String?
-  currentBatch   Batch?  @relation("CurrentBatch", fields: [currentBatchId], references: [id])
+  // Company relationship (if user belongs to a company)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
 
   // Relationships
-  crRegistrations       CRRegistration[]
-  createdStudents       User[]                 @relation("StudentCreator")
-  creator               User?                  @relation("StudentCreator", fields: [crId], references: [id])
-  institution           Institution?           @relation(fields: [institutionId], references: [id])
-  createdBatches        Batch[]                @relation("BatchCreatedBy")
-  createdTeachers       Teacher[]              @relation("TeacherCreatedBy")
-  createdSubjects       Subject[]              @relation("SubjectCreatedBy")
-  createdRoutines       Routine[]              @relation("RoutineCreatedBy")
-  postedNotices         Notice[]               @relation("NoticePostedBy")
-  createdAssessments    Assessment[]           @relation("AssessmentCreatedBy")
-  reportedIssues        Issue[]                @relation("IssueStudent")
-  resolvedIssues        Issue[]                @relation("IssueResolvedBy")
-  notifications         Notification[]         @relation("UserNotification")
-  auditLogs             AuditLog[]             @relation("AuditLogUser")
-  createdClasses        Class[]                @relation("ClassCreatedBy")
-  assessmentSubmissions AssessmentSubmission[] @relation("AssessmentSubmissionStudent")
-  batchEnrollments      BatchEnrollment[]      @relation("StudentEnrollments")
-  enrollmentAdded       BatchEnrollment[]      @relation("EnrollmentAddedBy")
-  devices               UserDevice[]           @relation("UserDevices")
+  jobs             Job[]             @relation("JobCreator")
+  applications     Application[]     @relation("UserApplications")
+  savedJobs        SavedJob[]        @relation("UserSavedJobs")
+  notifications    Notification[]    @relation("UserNotification")
+  auditLogs        AuditLog[]        @relation("AuditLogUser")
+  devices          UserDevice[]      @relation("UserDevices")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -8,8 +8,30 @@ enum UserStatus {
 }
 
 enum UserRole {
-  SUPER_ADMIN
   ADMIN
-  CR
-  STUDENT
+  COMPANY
+  USER
+}
+
+enum JobStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  ACCEPTED
+  REJECTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
 }

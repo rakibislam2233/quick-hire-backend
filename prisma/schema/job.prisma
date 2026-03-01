@@ -1,0 +1,27 @@
+model Job {
+  id              String    @id @default(cuid())
+  title           String
+  description     String
+  requirements    String?
+  responsibilities String?
+  salaryRange     String?
+  location        String?
+  type            JobType   @default(FULL_TIME)
+  status          JobStatus @default(PENDING)
+
+  companyId String
+  company   Company @relation("CompanyJobs", fields: [companyId], references: [id])
+
+  creatorId String
+  creator   User   @relation("JobCreator", fields: [creatorId], references: [id])
+
+  // Relationships
+  applications Application[] @relation("JobApplications")
+  savedBy      SavedJob[]    @relation("JobSavedBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("jobs")
+}

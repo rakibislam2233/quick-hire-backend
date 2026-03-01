@@ -1,0 +1,22 @@
+model Company {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  website      String?
+  logo         String?
+  location     String?
+  industry     String?
+  contactEmail String?
+  contactPhone String?
+  isVerified   Boolean  @default(false)
+
+  // Relationships
+  employees User[]
+  jobs      Job[]    @relation("CompanyJobs")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("companies")
+}
