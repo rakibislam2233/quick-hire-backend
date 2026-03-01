@@ -7,8 +7,7 @@
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=prisma&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)# Quick-hire Backend
-![BullMQ](https://img.shields.io/badge/BullMQ-000000?style=for-the-badge&logo=BullMQ&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![Nodemailer](https://img.shields.io/badge/Nodemailer-000000?style=for-the-badge&logo=Nodemailer&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
@@ -22,6 +21,16 @@
 ## 📖 Overview
 
 QuickHire Backend is a robust, scalable RESTful API designed to power modern job board applications. Built with TypeScript and following enterprise-grade patterns, it provides comprehensive functionality for job posting, application management, user authentication, and company management.
+
+## 🗃️ Database Schema
+
+Below is the Entity-Relationship Diagram showing the complete database structure:
+
+<div align="center">
+
+![ER Diagram](doc/er-diagram.png)
+
+</div>
 
 ### 🎯 Key Features
 

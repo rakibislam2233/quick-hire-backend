@@ -1,3 +1,5 @@
+// This file combines all schema files for proper Prisma v7 compatibility
+
 generator client {
   provider = "prisma-client"
   output   = "../generated"
@@ -5,4 +7,185 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// =============================== Enums =============================== //
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+  BANNED
+  DELETED
+}
+
+enum UserRole {
+  ADMIN
+  COMPANY
+  USER
+}
+
+enum JobStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  SCHEDULED
+  ACCEPTED
+  REJECTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+}
+
+// =============================== Models =============================== //
+
+model User {
+  id              String     @id @default(cuid())
+  fullName        String
+  email           String     @unique
+  password        String
+  phoneNumber     String?
+  profileImage    String?
+  bio             String?
+  role            UserRole   @default(USER)
+  status          UserStatus @default(ACTIVE)
+  isEmailVerified Boolean    @default(false)
+
+  // Company relationship (if user belongs to a company)
+  companyId String?
+
+  // Relationships
+  ownedCompanies Company[]     @relation("CompanyOwner")
+  company        Company?      @relation("CompanyEmployees", fields: [companyId], references: [id])
+  jobs           Job[]         @relation("JobCreator")
+  applications   Application[] @relation("UserApplications")
+  savedJobs      SavedJob[]    @relation("UserSavedJobs")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("users")
+}
+
+model Company {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  website     String?
+  logo        String?
+  industry    String?
+  size        String?
+  location    String?
+  foundedYear Int?
+
+  // Relationships
+  owner        User          @relation("CompanyOwner", fields: [ownerId], references: [id])
+  ownerId      String
+  employees    User[]        @relation("CompanyEmployees")
+  jobs         Job[]
+  applications Application[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("companies")
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  icon        String?
+
+  // Relationships
+  jobs Job[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("categories")
+}
+
+model Job {
+  id           String    @id @default(cuid())
+  title        String
+  description  String
+  requirements String
+  salary       String?
+  location     String
+  type         JobType
+  status       JobStatus @default(PENDING)
+  deadline     DateTime
+
+  // Foreign Keys
+  companyId  String
+  categoryId String
+
+  // Relationships
+  company      Company       @relation(fields: [companyId], references: [id])
+  category     Category      @relation(fields: [categoryId], references: [id])
+  creator      User          @relation("JobCreator", fields: [creatorId], references: [id])
+  creatorId    String
+  applications Application[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  isDeleted Boolean    @default(false)
+  savedJobs SavedJob[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  status      ApplicationStatus @default(PENDING)
+  coverLetter String?
+  resumeUrl   String?
+
+  // Foreign Keys
+  jobId     String
+  userId    String
+  companyId String
+
+  // Relationships
+  job     Job     @relation(fields: [jobId], references: [id])
+  user    User    @relation("UserApplications", fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  @@map("applications")
+}
+
+model SavedJob {
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  jobId  String
+  userId String
+
+  // Relationships
+  job  Job  @relation(fields: [jobId], references: [id])
+  user User @relation("UserSavedJobs", fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+  @@map("saved_jobs")
 }

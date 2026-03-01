@@ -9,7 +9,10 @@
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
+    "prisma:pull": "prisma db pull",
+    "supabase:test": "tsx -e \"import { testSupabaseConnection } from './src/config/supabase.config.js'; testSupabaseConnection();\"",
     "test": "jest",
     "seed": "tsx src/utils/seed.utils.ts"
   },
@@ -18,7 +21,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.0",
     "@supabase/supabase-js": "^2.95.3",
     "@upstash/redis": "^1.36.3",
@@ -51,7 +54,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.12",
     "otp-generator": "^4.0.1",
-    "pg": "^8.17.2",
+    "pg": "^8.19.0",
     "sharp": "^0.34.5",
     "socket.io": "^4.8.3",
     "tsx": "^4.21.0",

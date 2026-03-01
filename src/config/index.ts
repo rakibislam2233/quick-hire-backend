@@ -17,6 +17,9 @@ const optionalEnvVars = [
   'CLOUDINARY_API_SECRET',
   'SMTP_USERNAME',
   'SMTP_PASSWORD',
+  'SUPABASE_URL',
+  'SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_KEY',
 ] as const;
 
 // Validate required environment variables
@@ -174,6 +177,13 @@ const config = {
     publicKey: process.env.WEB_PUSH_PUBLIC_KEY || '',
     privateKey: process.env.WEB_PUSH_PRIVATE_KEY || '',
     subject: process.env.WEB_PUSH_SUBJECT || 'mailto:your-email@example.com',
+  },
+
+  // Supabase
+  supabase: {
+    url: process.env.SUPABASE_URL || '',
+    anonKey: process.env.SUPABASE_ANON_KEY || '',
+    serviceKey: process.env.SUPABASE_SERVICE_KEY || '',
   },
 };
 

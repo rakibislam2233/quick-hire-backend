@@ -46,21 +46,7 @@ const register = async (payload: IRegisterPayload) => {
 
   // 4. Create user and company in a transaction if role is COMPANY
   const result = await database.$transaction(async tx => {
-    // Determine if we need to create a company
-    let companyId: string | undefined;
-    if (role === UserRole.COMPANY && payload.companyName) {
-      const company = await tx.company.create({
-        data: {
-          name: payload.companyName,
-          location: payload.companyLocation,
-          industry: payload.companyIndustry,
-          isVerified: true, // Auto-verified as requested
-        },
-      });
-      companyId = company.id;
-    }
-
-    // Create user
+    // Create user first
     const newUser = await tx.user.create({
       data: {
         fullName,
@@ -68,14 +54,31 @@ const register = async (payload: IRegisterPayload) => {
         phoneNumber,
         password: hashedPassword,
         role,
-        companyId,
       },
     });
-    // updated company owner
-    await tx.company.update({
-      where: { id: companyId! },
-      data: { ownerId: newUser?.id },
-    });
+
+    // Create company if role is COMPANY and companyName provided
+    let companyId: string | undefined;
+    if (role === UserRole.COMPANY && payload.companyName) {
+      const company = await tx.company.create({
+        data: {
+          name: payload.companyName,
+          location: payload.companyLocation,
+          industry: payload.companyIndustry,
+          owner: {
+            connect: { id: newUser.id },
+          },
+        },
+      });
+      companyId = company.id;
+
+      // Update user with companyId
+      await tx.user.update({
+        where: { id: newUser.id },
+        data: { companyId },
+      });
+    }
+
     return newUser;
   });
 

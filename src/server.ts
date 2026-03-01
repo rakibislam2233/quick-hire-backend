@@ -315,9 +315,6 @@ async function main() {
     logger.info(colors.cyan('🌐 [4/5] Starting HTTP server...\n'));
     await startServer();
 
-    // Reschedule class status updates for existing classes
-    logger.info(colors.cyan('\n🔄 Rescheduling class status updates...'));
-
     // Step 5: Start health monitoring (development only)
     if (config.env === 'development') {
       logger.info(colors.cyan('\n📊 [5/5] Starting health monitoring...'));
