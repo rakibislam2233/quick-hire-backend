@@ -6,6 +6,7 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { IApplyJobPayload } from './application.interface';
 
 // ── Apply to a Job ────────────────────────────────────────────────────────────
 const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload) => {

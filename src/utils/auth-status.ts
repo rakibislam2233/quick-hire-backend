@@ -1,6 +1,7 @@
-import { UserRole } from '../../prisma/generated/enums';
-
-export const getAuthStatus = (user: any) => {
+// ── Simple auth status check ────────────────────────────────────────────────────
+// For Quick Hire, the only gate is email verification.
+// Companies and users can log in once email is verified.
+export const getAuthStatus = (user: { isEmailVerified: boolean }) => {
   if (!user.isEmailVerified) {
     return {
       message: 'Email not verified. Please verify your email.',
@@ -8,30 +9,5 @@ export const getAuthStatus = (user: any) => {
     };
   }
 
-  // Student-specific flow: Check registration and approval
-  if (user.role === UserRole.STUDENT && !user.currentBatchId) {
-    if (!user.isRegistrationComplete) {
-      return {
-        message: 'Please complete your CR registration details.',
-        status: { isRegistrationComplete: false },
-      };
-    }
-
-    if (!user.crApprovedAt) {
-      return {
-        message: 'CR registration is pending approval. Please wait for admin approval.',
-        status: { isRegistrationComplete: true, isCrApproved: false },
-      };
-    }
-  }
-
-  // CR-specific flow: Check approval
-  if (user.role === UserRole.CR && !user.crApprovedAt) {
-    return {
-      message: 'CR registration submitted. Awaiting admin approval.',
-      status: { isCrApproved: false },
-    };
-  }
-
-  return null;
+  return null; // All clear — proceed to login
 };

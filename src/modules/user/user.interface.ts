@@ -1,27 +1,16 @@
-import { BatchType, InstitutionType, UserRole } from '../../../prisma/generated/enums';
+import { UserRole } from '../../../prisma/generated/enums';
 
+// ── Create User Account ────────────────────────────────────────────────────────
 export interface ICreateAccountPayload {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   password: string;
-  role?: UserRole; // Add role field with proper type
+  role?: UserRole;
 }
 
-// Interface for CR to create students
-export interface ICreateStudentPayload {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  studentId?: string;
-  institutionId?: string;
-  batchId?: string;
-  crId: string;
-}
-
-// User filter options
-export interface UserFilterOptions {
+// ── User Filter Options ────────────────────────────────────────────────────────
+export interface IUserFilterOptions {
   fullName?: string;
   email?: string;
   phoneNumber?: string;
@@ -31,35 +20,10 @@ export interface UserFilterOptions {
   search?: string;
 }
 
-// User query options
-export interface UserQueryOptions extends UserFilterOptions {
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
-
-//update institution and batch
-export interface IUpdateInstitutionAndBatchPayload {
-  institutionInfo: {
-    name?: string;
-    shortName?: string;
-    establishedYear?: number;
-    type?: InstitutionType;
-    logo?: string;
-    contactEmail?: string;
-    contactPhone?: string;
-    website?: string;
-    address?: string;
-  };
-  // Batch Info
-  batchInformation: {
-    batchType?: BatchType;
-    department?: string;
-    session?: string;
-    academicYear?: string;
-    semester?: string;
-    shift?: string;
-    group?: string;
-  };
+// ── Update My Profile ──────────────────────────────────────────────────────────
+export interface IUpdateMyProfilePayload {
+  fullName?: string;
+  phoneNumber?: string;
+  profileImage?: string;
+  bio?: string;
 }

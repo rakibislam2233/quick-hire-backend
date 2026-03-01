@@ -1,66 +1,31 @@
 import { Router } from 'express';
+import { UserRole } from '../../../prisma/generated/enums';
 import { auth } from '../../middleware/auth.middleware';
 import validateRequest from '../../middleware/validation.middleware';
 import { UserController } from './user.controller';
 import { UserValidations } from './user.validation';
-import upload from '../../utils/fileUpload.utils';
-import { UserRole } from '../../../prisma/generated/enums';
 
 const router = Router();
 
-//update institution and batch
-router.patch(
-  '/update-institution-and-batch',
-  auth(UserRole.CR),
-  upload.single('logo'),
-  validateRequest(UserValidations.updateInstitutionAndBatch),
-  UserController.updateInstitutionAndBatch
-);
-
-// Create student (CR only)
-router.post(
-  '/create-student',
-  auth(UserRole.CR),
-  validateRequest(UserValidations.createStudent),
-  UserController.createStudent
-);
-
-router.get('/all-students', auth(UserRole.CR), UserController.getAllStudents);
-
-// Get user profile
+// Get own profile
 router
   .route('/profile/me')
-  .get(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
-    UserController.getUserProfile
-  )
+  .get(auth(UserRole.ADMIN, UserRole.COMPANY, UserRole.USER), UserController.getUserProfile)
   .patch(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
+    auth(UserRole.ADMIN, UserRole.COMPANY, UserRole.USER),
     validateRequest(UserValidations.updateMyProfile),
     UserController.updateMyProfile
   )
-  .delete(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
-    UserController.deleteMyProfile
-  );
+  .delete(auth(UserRole.ADMIN, UserRole.COMPANY, UserRole.USER), UserController.deleteMyProfile);
 
-// Get all users (Admin only)
-router.get('/', auth(UserRole.ADMIN, UserRole.SUPER_ADMIN), UserController.getAllUsers);
+// Admin: get all users
+router.get('/', auth(UserRole.ADMIN), UserController.getAllUsers);
 
-// Get user by ID
+// Admin: get / update / delete user by ID
 router
   .route('/:id')
-  .get(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
-    UserController.getUserById
-  )
-  .patch(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
-    UserController.updateUser
-  )
-  .delete(
-    auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CR, UserRole.STUDENT),
-    UserController.deleteUser
-  );
+  .get(auth(UserRole.ADMIN), UserController.getUserById)
+  .patch(auth(UserRole.ADMIN), UserController.updateUser)
+  .delete(auth(UserRole.ADMIN), UserController.deleteUser);
 
 export const UserRoutes = router;
