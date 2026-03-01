@@ -13,10 +13,7 @@ const register = z.object({
     password: z
       .string({ error: 'Password is required and must be a string' })
       .min(8, 'Password must be at least 8 characters long'),
-    phoneNumber: z
-      .string({ error: 'Phone number is required and must be a string' })
-      .min(8, 'Phone number must be at least 8 characters'),
-    role: z.enum(['CR']).optional().default('CR'), // Only CR role allowed for self-registration
+    role: z.enum(['USER', 'COMPANY']).optional().default('USER'),
   }),
 });
 
@@ -31,10 +28,6 @@ const login = z.object({
     password: z
       .string({ error: 'Password is required and must be a string' })
       .min(1, 'Password is required'),
-
-    // Optional push notification tokens
-    fcmToken: z.string().optional(),
-    webPushToken: z.string().optional(),
   }),
 });
 
@@ -44,7 +37,6 @@ const verifyOTP = z.object({
     sessionId: z
       .string({ error: 'Session ID is required and must be a string' })
       .min(1, 'Session ID is required'),
-
     code: z
       .string({ error: 'OTP code is required and must be a string' })
       .length(6, 'OTP must be exactly 6 digits')
