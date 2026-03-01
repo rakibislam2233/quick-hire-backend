@@ -9,7 +9,7 @@ import {
 } from '../../utils/pagination.utils';
 
 // ── Create/Post a Job ─────────────────────────────────────────────────────────
-const createJob = async (creatorId: string, data: any) => {
+const createJob = async (creatorId: string, data: ICreateJobPayload) => {
   // Verify creator belongs to the company
   const user = await database.user.findUnique({ where: { id: creatorId } });
   if (!user?.companyId) {
@@ -27,7 +27,7 @@ const createJob = async (creatorId: string, data: any) => {
 };
 
 // ── Get All Approved Jobs (Public) ────────────────────────────────────────────
-const getAllJobs = async (filters: any, options: any) => {
+const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, string>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -42,7 +42,7 @@ const getAllJobs = async (filters: any, options: any) => {
     andConditions.push({
       OR: [
         { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }, 
+        { description: { contains: search, mode: 'insensitive' } },
         { company: { name: { contains: search, mode: 'insensitive' } } },
       ],
     });
@@ -71,7 +71,10 @@ const getAllJobs = async (filters: any, options: any) => {
 };
 
 // ── Get All Jobs for Admin (includes PENDING) ─────────────────────────────────
-const getAllJobsForAdmin = async (filters: any, options: any) => {
+const getAllJobsForAdmin = async (
+  filters: IJobAdminFilterOptions,
+  options: Record<string, string>
+) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -116,7 +119,7 @@ const getJobById = async (id: string) => {
 };
 
 // ── Update Job ────────────────────────────────────────────────────────────────
-const updateJob = async (id: string, creatorId: string, data: Prisma.JobUpdateInput) => {
+const updateJob = async (id: string, creatorId: string, data: IUpdateJobPayload) => {
   const job = await database.job.findUnique({ where: { id, isDeleted: false } });
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
 

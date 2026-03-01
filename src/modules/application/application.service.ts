@@ -8,7 +8,7 @@ import {
 } from '../../utils/pagination.utils';
 
 // ── Apply to a Job ────────────────────────────────────────────────────────────
-const applyToJob = async (userId: string, jobId: string, data: any) => {
+const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload) => {
   // Check job exists and is approved
   const job = await database.job.findUnique({
     where: { id: jobId, status: 'APPROVED', isDeleted: false },
@@ -26,7 +26,7 @@ const applyToJob = async (userId: string, jobId: string, data: any) => {
 };
 
 // ── Get My Applications (Job Seeker) ──────────────────────────────────────────
-const getMyApplications = async (userId: string, options: any) => {
+const getMyApplications = async (userId: string, options: Record<string, string>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -45,7 +45,11 @@ const getMyApplications = async (userId: string, options: any) => {
 };
 
 // ── Get Applications for a Job (Company) ─────────────────────────────────────
-const getApplicationsByJob = async (jobId: string, companyUserId: string, options: any) => {
+const getApplicationsByJob = async (
+  jobId: string,
+  companyUserId: string,
+  options: Record<string, string>
+) => {
   // Verify requester owns the job's company
   const job = await database.job.findUnique({ where: { id: jobId } });
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');

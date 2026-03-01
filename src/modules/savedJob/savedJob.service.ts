@@ -8,7 +8,7 @@ import {
 } from '../../utils/pagination.utils';
 
 // ── Toggle Save / Unsave a Job ────────────────────────────────────────────────
-const toggleSaveJob = async (userId: string, jobId: string) => {
+const toggleSaveJob = async (userId: string, jobId: string): Promise<IToggleSaveJobResult> => {
   const job = await database.job.findUnique({ where: { id: jobId, isDeleted: false } });
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
 
@@ -28,7 +28,7 @@ const toggleSaveJob = async (userId: string, jobId: string) => {
 };
 
 // ── Get My Saved Jobs ─────────────────────────────────────────────────────────
-const getSavedJobs = async (userId: string, options: any) => {
+const getSavedJobs = async (userId: string, options: Record<string, string>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
