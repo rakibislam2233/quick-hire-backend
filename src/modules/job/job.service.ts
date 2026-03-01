@@ -42,7 +42,7 @@ const getAllJobs = async (filters: any, options: any) => {
     andConditions.push({
       OR: [
         { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }, 
         { company: { name: { contains: search, mode: 'insensitive' } } },
       ],
     });
