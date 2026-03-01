@@ -1,255 +1,377 @@
-# Quick-hire Backend
+# QuickHire Backend
+
+<div align="center">
 
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=prisma&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)# Quick-hire Backend
 ![BullMQ](https://img.shields.io/badge/BullMQ-000000?style=for-the-badge&logo=BullMQ&logoColor=white)
 ![Nodemailer](https://img.shields.io/badge/Nodemailer-000000?style=for-the-badge&logo=Nodemailer&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
-A robust, scalable backend application built with Node.js, TypeScript, and PostgreSQL using Prisma ORM. This application provides a comprehensive foundation for building modern web applications with features like authentication, file uploads, and more.
+**A comprehensive, production-ready job board backend built with modern technologies**
 
-## 🚀 Features
+[![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 
-- **Authentication & Authorization**: JWT-based authentication with refresh tokens
-- **File Uploads**: Cloudinary integration for media storage
-- **Security**: Comprehensive security measures including CORS, CSRF, XSS protection
-- **Caching**: Redis integration for caching and session management
-- **Environment Configuration**: Flexible environment-based configuration
-- **Logging**: Structured logging with Winston
-- **API Documentation**: Auto-generated API documentation
+</div>
 
-## 🛠️ Tech Stack
+## 📖 Overview
 
-- **Runtime**: ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white) Node.js
-- **Language**: ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white) TypeScript
-- **Framework**: ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=flat-square&logo=express&logoColor=white) Express.js
-- **Database**: ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white) PostgreSQL
-- **ORM**: ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=flat-square&logo=prisma&logoColor=white) Prisma with PostgreSQL adapter
-- **Authentication**: ![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=JSON%20web%20tokens&logoColor=white) JWT, bcrypt
-- **Caching**: ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white) Redis
+QuickHire Backend is a robust, scalable RESTful API designed to power modern job board applications. Built with TypeScript and following enterprise-grade patterns, it provides comprehensive functionality for job posting, application management, user authentication, and company management.
+
+### 🎯 Key Features
+
+- **🔐 Advanced Authentication**: JWT-based auth with refresh tokens, role-based access control (Admin, Company, User)
+- **💼 Job Management**: Complete CRUD operations with status management (Pending, Approved, Rejected, Closed)
+- **🏢 Company Profiles**: Comprehensive company management with verification system
+- **📁 Application Tracking**: Full application lifecycle management with interview scheduling
+- **🏷️ Category System**: Flexible job categorization with job count tracking
+- **💾 Smart Caching**: Redis-based caching for optimal performance
+- **📡 Real-time Features**: Socket.IO integration for live notifications
+- **🔒 Enterprise Security**: Comprehensive security measures (CORS, CSRF, XSS, Rate Limiting)
+- **📊 Advanced Logging**: Structured logging with Winston and daily rotation
+- **📁 File Management**: Cloudinary integration for file uploads
+- **🔍 Advanced Search**: Full-text search with filtering and pagination
+- **📈 Analytics Dashboard**: Comprehensive admin analytics and reporting
+
+## 🛠️ Technology Stack
+
+### Core Technologies
+
+- **Runtime**: Node.js v16+
+- **Language**: TypeScript 5.9+
+- **Framework**: Express.js 5.x
+
+### Database & ORM
+
+- **Database**: PostgreSQL
+- **ORM**: Prisma 7.x
+
+### Authentication & Security
+
+- **Authentication**: JWT with refresh tokens
+- **Password Hashing**: bcrypt
+- **Security**: Helmet, CORS, CSRF, XSS Protection, Rate Limiting
+
+### Caching & Real-time
+
+- **Caching**: Redis
+- **Real-time**: Socket.IO
+
+### File Storage & Communication
+
 - **File Storage**: Cloudinary
-- **Real-time**: ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=flat-square&logo=socket.io&logoColor=white) Socket.IO
-- **Security**: Helmet, csurf, express-mongo-sanitize, hpp
+- **Email**: Nodemailer
+- **Push Notifications**: Firebase Admin
+
+### Development & Quality
+
+- **Validation**: Zod schemas
 - **Logging**: Winston
-- **Testing**: Jest (planned)
+- **Testing**: Jest
+- **Code Quality**: ESLint, Prettier
 
-## 📋 Prerequisites
+## 🚀 Quick Start
 
-Before you begin, ensure you have met the following requirements:
-
-- Node.js (v16 or higher)
-- PostgreSQL database
-- Redis server
-- Cloudinary account (optional, for file uploads)
-
-## 🚀 Installation
-
-1. Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/rakibislam2233/quick-hire-backend.git
 cd quick-hire-backend
 ```
 
-2. Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-3. Set up environment variables (see `.env.example`):
+### 3. Environment Setup
 
-```bash
-cp .env.example .env
+Create a `.env` file:
+
+```env
+# Application
+NODE_ENV=development
+PORT=8082
+
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/quickhire"
+
+# Authentication
+JWT_ACCESS_SECRET=your_super_secret_access_token_key
+JWT_REFRESH_SECRET=your_super_secret_refresh_token_key
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Cloudinary (Optional)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Email Configuration (Optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+
+# CORS
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 
-4. Update your `.env` file with appropriate values
-
-5. Run database migrations:
+### 4. Database Setup
 
 ```bash
-npx prisma migrate dev
-```
-
-6. Generate Prisma client:
-
-```bash
+npx prisma migrate dev --name init
 npx prisma generate
 ```
 
-7. Start the development server:
+### 5. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-## 📁 Project Structure
+The server will start at `http://localhost:8082`
+
+## 📁 Project Architecture
 
 ```
-src/
-├── app.ts              # Express application setup
-├── server.ts           # Server initialization and startup
-├── config/             # Configuration files
-│   ├── index.ts        # Main configuration
-│   ├── database.config.ts # Database configuration
-│   ├── redis.config.ts # Redis configuration
-│   └── logger.config.ts # Logger configuration
-├── controllers/        # Request handlers
-├── middleware/         # Custom middleware
-├── models/             # Data models (via Prisma)
-├── routes/             # API route definitions
-├── services/           # Business logic
-├── utils/              # Utility functions
-├── socket/             # Socket.IO handlers
-└── modules/            # Feature modules
-    ├── auth/           # Authentication module
-    ├── user/           # User management module
-    └── otp/            # OTP management module
+quick-hire-backend/
+├── 📁 src/                          # Source code
+│   ├── 📄 app.ts                   # Express application setup
+│   ├── 📄 server.ts                # Server initialization
+│   ├── 📁 config/                  # Configuration management
+│   ├── 📁 modules/                 # Feature modules
+│   │   ├── 📁 auth/                # Authentication
+│   │   ├── 📁 user/                # User management
+│   │   ├── 📁 company/             # Company management
+│   │   ├── 📁 job/                 # Job management
+│   │   ├── 📁 category/            # Category management
+│   │   ├── 📁 application/         # Application management
+│   │   ├── 📁 savedJob/            # Saved jobs
+│   │   ├── 📁 otp/                 # OTP verification
+│   │   └── 📁 dashboard/           # Admin dashboard
+│   ├── 📁 middleware/              # Custom middleware
+│   ├── 📁 utils/                  # Utility functions
+│   ├── 📁 routes/                 # API routes
+│   ├── 📁 queues/                 # BullMQ job queues
+│   └── 📁 workers/                # Queue workers
+├── 📁 prisma/                     # Database schema
+│   ├── 📁 schema/                 # Prisma schema files
+│   ├── 📁 migrations/             # Database migrations
+│   └── 📁 generated/              # Generated Prisma client
+├── 📁 postman/                    # Postman collection
+│   ├── 📄 QuickHire_API_Collection.json
+│   └── 📄 API_Documentation.md
+├── 📄 package.json                # Dependencies
+├── � tsconfig.json              # TypeScript config
+├── 📄 .eslintrc.json             # ESLint config
+├── 📄 .prettierrc                # Prettier config
+└── 📄 README.md                  # This file
 ```
 
-## 🔐 Environment Variables
+## 🗄️ Database Schema
 
-Create a `.env` file in the root directory and add the following variables:
+### Core Entities
 
-```env
-# Application Environment
-NODE_ENV=development
-PORT=8082
-SOCKET=8082
+#### 👤 User
 
-# Database
-DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
+- **Roles**: ADMIN, COMPANY, USER
+- **Status**: ACTIVE, INACTIVE, BLOCKED, BANNED
+- **Features**: Email verification, profile management, company association
 
-# JWT Authentication
-JWT_ACCESS_SECRET=your_super_secret_access_token_key
-JWT_REFRESH_SECRET=your_super_secret_refresh_token_key
-JWT_RESET_PASSWORD_SECRET=your_super_secret_reset_password_key
+#### 🏢 Company
 
-# Redis
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_PASSWORD=your_redis_password
-REDIS_DB=0
+- **Verification**: Verified badge system
+- **Details**: Industry, location, employee count, contact info
+- **Relationships**: Multiple employees, job postings
 
-# Cloudinary (for file uploads)
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+#### 💼 Job
 
-# Email Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USERNAME=your_email@gmail.com
-SMTP_PASSWORD=your_app_password
-EMAIL_FROM=your_email@gmail.com
+- **Status Flow**: PENDING → APPROVED/REJECTED → CLOSED
+- **Types**: FULL_TIME, PART_TIME, CONTRACT, INTERNSHIP, FREELANCE
+- **Features**: Salary range, location, requirements, responsibilities
 
-# CORS
-ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-DEV_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000
+#### 📝 Application
 
-# Security
-ENCRYPTION_KEY=your_encryption_key_for_sensitive_data
+- **Status Tracking**: PENDING → REVIEWING → SHORTLISTED → SCHEDULED → ACCEPTED/REJECTED
+- **Features**: Resume upload, cover letter, interview scheduling
+
+#### 🏷️ Category
+
+- **Organization**: Job categorization with icons
+- **Analytics**: Job count per category
+
+## 📚 API Documentation
+
+### Base URL
+
+```
+http://localhost:8082/api/v1
 ```
 
-## 🧪 Running Tests
+### Core Endpoints
 
-Currently, the test suite is being developed. To run existing tests:
+#### 🔐 Authentication
 
-```bash
-npm test
-```
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `POST /auth/logout` - User logout
 
-## 🚀 Deployment
+#### � User Management
 
-### Production Build
+- `GET /users/profile/me` - Get user profile
+- `PATCH /users/profile/me` - Update user profile
 
-```bash
-npm run build
-```
+#### 🏢 Company Management
 
-### Running in Production
+- `GET /companies` - Get all companies
+- `GET /companies/:id` - Get company details
+- `POST /companies` - Create company (Admin)
+- `PATCH /companies/:id` - Update company
 
-```bash
-npm start
-```
+#### � Job Management
 
-### Docker Support
+- `GET /jobs` - Get all jobs (Public)
+- `GET /jobs/:id` - Get job details (Public)
+- `POST /jobs` - Create job (Company)
+- `PATCH /jobs/:id` - Update job (Company/Admin)
+- `DELETE /jobs/:id` - Delete job (Company/Admin)
+- `PATCH /jobs/admin/:id/status` - Update job status (Admin)
 
-Coming soon...
+#### 🏷️ Category Management
 
-## 🔐 Security Features
+- `GET /categories` - Get all categories (Public)
+- `GET /categories/:id` - Get category details (Public)
+- `POST /categories` - Create category (Admin)
+- `PATCH /categories/:id` - Update category (Admin)
+- `DELETE /categories/:id` - Delete category (Admin)
 
-- **CORS**: Configurable cross-origin resource sharing
-- **CSRF**: Cross-site request forgery protection
-- **XSS**: Cross-site scripting prevention
-- **SQL Injection**: Prisma ORM prevents SQL injection
-- **Rate Limiting**: Built-in rate limiting for API endpoints
-- **Input Validation**: Comprehensive input validation and sanitization
+#### 📝 Application Management
 
-## 📊 API Endpoints
+- `GET /applications` - Get user applications
+- `POST /applications/job/:jobId` - Apply for job
+- `PATCH /applications/:id/status` - Update application status (Company)
 
-The API follows RESTful conventions and is organized by modules:
-
-### Core Modules
-
-- `/api/v1/auth` - Authentication endpoints
-- `/api/v1/users` - User management endpoints
-- `/api/v1/otp` - OTP management endpoints
-- `/api/v1/files` - File upload endpoints
-
-### Job & Category Modules
-
-- `/api/v1/jobs` - Job management endpoints
-- `/api/v1/categories` - Category management endpoints
-
-### 📖 Detailed API Documentation
-
-For comprehensive API documentation including all endpoints, validation rules, and examples, see:
+### 📖 Complete API Reference
 
 - **[API Documentation](./postman/API_Documentation.md)** - Complete API reference
 - **[Postman Collection](./postman/QuickHire_API_Collection.json)** - Ready-to-use Postman collection
 
-API documentation is auto-generated and available at `/api-docs` in development mode.
+## 🔧 Development Scripts
 
-## 🔄 Real-time Features
+```bash
+# Development
+npm run dev              # Start development server
+npm run build            # Build for production
+npm run start            # Start production server
 
-The application supports real-time communication using Socket.IO with Redis adapter for horizontal scaling:
+# Database
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:migrate   # Run database migrations
+npm run prisma:studio    # Open Prisma Studio
 
-- Real-time notifications
-- Live updates
-- Chat functionality (planned)
+# Testing
+npm test                 # Run test suite
+npm run lint             # Run ESLint
+npm run format           # Format code with Prettier
+```
 
-## 🗂️ Database Schema
+## � Security Features
 
-The application uses PostgreSQL with the following main entities:
+### Authentication & Authorization
 
-- **User**: User accounts and profiles
-- **Otp**: One-time passwords for verification
-- **RefreshToken**: JWT refresh tokens
-- **FileUpload**: File metadata and storage information
+- **JWT Tokens**: Access and refresh token system
+- **Role-Based Access**: Granular permissions (Admin, Company, User)
+- **Password Security**: bcrypt hashing with salt rounds
+- **Email Verification**: Account verification system
+
+### API Security
+
+- **CORS Protection**: Configurable cross-origin resource sharing
+- **CSRF Protection**: Cross-site request forgery prevention
+- **XSS Protection**: Cross-site scripting prevention
+- **SQL Injection Prevention**: Prisma ORM parameterized queries
+- **Rate Limiting**: Configurable rate limits per endpoint
+- **Input Validation**: Comprehensive Zod schema validation
+- **Helmet**: Security header configuration
+
+## � Performance Optimizations
+
+### Caching Strategy
+
+- **Redis Integration**: Session storage and data caching
+- **Query Caching**: Frequently accessed data caching
+- **Cache Invalidation**: Smart cache invalidation on data changes
+
+### Database Optimization
+
+- **Connection Pooling**: Efficient database connection management
+- **Query Optimization**: Optimized Prisma queries
+- **Indexing**: Strategic database indexes
+- **Soft Deletes**: Performance-friendly data deletion
+
+## 📊 Monitoring & Logging
+
+### Logging System
+
+- **Winston**: Structured logging framework
+- **Log Levels**: Debug, Info, Warn, Error
+- **Daily Rotation**: Automatic log file rotation
+- **Structured Format**: JSON-based log format
+- **Performance Metrics**: Request/response time logging
 
 ## 🤝 Contributing
 
+### Development Workflow
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes with proper commit messages
+4. Run tests: `npm test`
+5. Run linting: `npm run lint`
+6. Push to your fork and open a Pull Request
+
+### Code Standards
+
+- Follow TypeScript best practices
+- Use ESLint and Prettier configurations
+- Write meaningful commit messages
+- Add tests for new features
+- Update documentation
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## � Acknowledgments
 
-If you have any questions or need help, feel free to open an issue in the repository.
+- **Express.js Team** - For the excellent web framework
+- **Prisma Team** - For the amazing ORM
+- **TypeScript Team** - For the type-safe JavaScript
+- **Open Source Community** - For all the amazing packages
 
-## 🙏 Acknowledgments
+## 📞 Support & Contact
 
-- Express.js team
-- Prisma team
-- All the contributors who made this project possible
+- **Issues**: [GitHub Issues](https://github.com/rakibislam2233/quick-hire-backend/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/rakibislam2233/quick-hire-backend/discussions)
+- **Email**: rakibislam2233@gmail.com
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Rakib Islam](https://github.com/rakibislam2233)**
+
+[![GitHub followers](https://img.shields.io/github/followers/rakibislam2233?style=social)](https://github.com/rakibislam2233)
+[![GitHub stars](https://img.shields.io/github/stars/rakibislam2233/quick-hire-backend?style=social)](https://github.com/rakibislam2233/quick-hire-backend)
+
+</div>
