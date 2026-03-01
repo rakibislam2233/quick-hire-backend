@@ -24,6 +24,10 @@ const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
     data: { companyId: company.id, role: 'COMPANY' },
   });
 
+  // Invalidate user cache and company list
+  await RedisUtils.deleteCache(USER_CACHE_KEY.PROFILE(userId));
+  await RedisUtils.deleteCachePattern(COMPANY_CACHE_KEY.LIST);
+
   return company;
 };
 
@@ -77,12 +81,18 @@ const getAllCompanies = async (
 
 // ── Get Company By ID ─────────────────────────────────────────────────────────
 const getCompanyById = async (id: string) => {
+  const cacheKey = COMPANY_CACHE_KEY.DETAIL(id);
+  const cachedCompany = await RedisUtils.getCache<any>(cacheKey);
+  if (cachedCompany) return cachedCompany;
+
   const company = await database.company.findUnique({
     where: { id, isDeleted: false },
     include: { _count: { select: { jobs: true } } },
   });
 
   if (!company) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
+
+  await RedisUtils.setCache(cacheKey, company, COMPANY_CACHE_TTL.DETAIL);
 
   return company;
 };
@@ -92,7 +102,10 @@ const updateCompany = async (id: string, data: IUpdateCompanyPayload) => {
   const isExist = await database.company.findUnique({ where: { id, isDeleted: false } });
   if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  return database.company.update({ where: { id }, data });
+  const updated = await database.company.update({ where: { id }, data });
+  await RedisUtils.deleteCache(COMPANY_CACHE_KEY.DETAIL(id));
+  await RedisUtils.deleteCachePattern(COMPANY_CACHE_KEY.LIST);
+  return updated;
 };
 
 // ── Soft Delete Company ───────────────────────────────────────────────────────
@@ -100,7 +113,10 @@ const deleteCompany = async (id: string) => {
   const isExist = await database.company.findUnique({ where: { id } });
   if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  return database.company.update({ where: { id }, data: { isDeleted: true } });
+  const result = await database.company.update({ where: { id }, data: { isDeleted: true } });
+  await RedisUtils.deleteCache(COMPANY_CACHE_KEY.DETAIL(id));
+  await RedisUtils.deleteCachePattern(COMPANY_CACHE_KEY.LIST);
+  return result;
 };
 
 export const CompanyService = {
