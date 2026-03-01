@@ -26,4 +26,16 @@ export interface IUpdateMyProfilePayload {
   phoneNumber?: string;
   profileImage?: string;
   bio?: string;
+  company?: {
+    name?: string;
+    description?: string;
+    website?: string;
+    logo?: string;
+    location?: string;
+    industry?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    founded?: string;
+    employeeSize?: string;
+  };
 }

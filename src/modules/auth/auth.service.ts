@@ -115,7 +115,6 @@ const login = async (payload: ILoginPayload, req?: Request) => {
 
   // 3. Verify password
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log('isMatch', isMatch);
   if (!isMatch) {
     const attempts = await RedisUtils.incrementCounter(attemptKey);
     if (attempts === 1) await RedisUtils.updateTTL(attemptKey, AUTH_CACHE_TTL.LOGIN_ATTEMPT);

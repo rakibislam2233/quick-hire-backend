@@ -1,5 +1,5 @@
-import { redisClient } from '../config/redis.config';
 import colors from 'colors';
+import { redisClient } from '../config/redis.config';
 
 // Generic type for cached data
 type CachedData<T> = T | null;
@@ -22,7 +22,18 @@ const getCache = async <T>(key: string): Promise<CachedData<T>> => {
   try {
     const data = await redisClient.get(key);
     if (!data) return null;
-    return JSON.parse(data) as T;
+
+    // Handle Upstash Redis response format
+    if (typeof data === 'object') {
+      return data as T;
+    }
+
+    // Handle string data (JSON)
+    if (typeof data === 'string') {
+      return JSON.parse(data) as T;
+    }
+
+    return data as T;
   } catch (error) {
     console.error(colors.red(`❌ Redis GET error for key ${key}:`), error);
     return null;
@@ -89,13 +100,20 @@ const incrementCounter = async (key: string, amount: number = 1): Promise<number
 const setCacheNX = async <T>(key: string, value: T, ttlSeconds?: number): Promise<boolean> => {
   try {
     const serialized = JSON.stringify(value);
-    if (ttlSeconds) {
-      const result = await redisClient.set(key, serialized, 'EX', ttlSeconds, 'NX');
-      return result === 'OK';
-    } else {
-      const result = await redisClient.setnx(key, serialized);
-      return result === 1;
+
+    // Check if key exists first
+    const exists = await redisClient.exists(key);
+    if (exists) {
+      return false;
     }
+
+    if (ttlSeconds) {
+      await redisClient.setex(key, ttlSeconds, serialized);
+    } else {
+      await redisClient.set(key, serialized);
+    }
+
+    return true;
   } catch (error) {
     console.error(colors.red(`❌ Redis SETNX error for key ${key}:`), error);
     throw error;
@@ -106,7 +124,21 @@ const getMultipleCache = async <T>(keys: string[]): Promise<CachedData<T>[]> => 
   try {
     if (keys.length === 0) return [];
     const values = await redisClient.mget(...keys);
-    return values.map(value => (value ? JSON.parse(value) : null));
+    return values.map(value => {
+      if (!value) return null;
+
+      // Handle Upstash Redis response format
+      if (typeof value === 'object') {
+        return value as T;
+      }
+
+      // Handle string data (JSON)
+      if (typeof value === 'string') {
+        return JSON.parse(value) as T;
+      }
+
+      return value as T;
+    });
   } catch (error) {
     console.error(colors.red(`❌ Redis MGET error:`), error);
     return keys.map(() => null);
@@ -135,7 +167,7 @@ const getKeysByPattern = async (pattern: string): Promise<string[]> => {
 const hashOperations = {
   setHash: async <T>(key: string, field: string, value: T): Promise<void> => {
     try {
-      await redisClient.hset(key, field, JSON.stringify(value));
+      await redisClient.hset(key, { [field]: JSON.stringify(value) });
     } catch (error) {
       console.error(colors.red(`❌ Redis HSET error for key ${key}:`), error);
       throw error;
@@ -145,7 +177,18 @@ const hashOperations = {
     try {
       const data = await redisClient.hget(key, field);
       if (!data) return null;
-      return JSON.parse(data) as T;
+
+      // Handle Upstash Redis response format
+      if (typeof data === 'object') {
+        return data as T;
+      }
+
+      // Handle string data (JSON)
+      if (typeof data === 'string') {
+        return JSON.parse(data) as T;
+      }
+
+      return data as T;
     } catch (error) {
       console.error(colors.red(`❌ Redis HGET error for key ${key}:`), error);
       return null;
@@ -155,8 +198,21 @@ const hashOperations = {
     try {
       const data = await redisClient.hgetall(key);
       const result: Record<string, T> = {};
+
+      // Handle case where key doesn't exist (data is null)
+      if (!data) {
+        return result;
+      }
+
       for (const [field, value] of Object.entries(data)) {
-        result[field] = JSON.parse(value) as T;
+        // Handle Upstash Redis response format
+        if (typeof value === 'object') {
+          result[field] = value as T;
+        } else if (typeof value === 'string') {
+          result[field] = JSON.parse(value) as T;
+        } else {
+          result[field] = value as T;
+        }
       }
       return result;
     } catch (error) {

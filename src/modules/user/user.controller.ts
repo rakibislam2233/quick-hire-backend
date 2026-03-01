@@ -48,7 +48,7 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
   if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
 
-  const userProfile = await UserService.getUserById(userId);
+  const userProfile = await UserService.getUserProfile(userId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
