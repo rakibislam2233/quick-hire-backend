@@ -6,3 +6,4 @@ dist
 .env
 .claude
 /prisma/generated/
+readme

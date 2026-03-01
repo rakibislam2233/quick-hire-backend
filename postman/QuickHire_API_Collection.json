@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "quick-hire-ultimate-v2",
+    "_postman_id": "quick-hire-ultimate-v3",
     "name": "QuickHire Ultimate API Collection",
     "description": "100% Exhaustive collection for Admin, Company, and User. Features Unified Registration, Auto-Activation, and Interview Scheduling.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -16,7 +16,7 @@
               "name": "Register Admin",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/register",
+                "url": "{{quick-hire-url}}/auth/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"fullName\": \"Admin User\", \"email\": \"admin@quickhire.com\", \"password\": \"Admin123!\", \"role\": \"ADMIN\"}"
@@ -38,7 +38,7 @@
               ],
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/login",
+                "url": "{{quick-hire-url}}/auth/login",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"email\": \"admin@quickhire.com\", \"password\": \"Admin123!\"}"
@@ -49,7 +49,7 @@
               "name": "Verify OTP",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/verify-otp",
+                "url": "{{quick-hire-url}}/auth/verify-otp",
                 "body": { "mode": "raw", "raw": "{\"sessionId\": \"...\", \"code\": \"123456\"}" }
               }
             },
@@ -57,7 +57,7 @@
               "name": "Resend OTP",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/resend-otp",
+                "url": "{{quick-hire-url}}/auth/resend-otp",
                 "body": { "mode": "raw", "raw": "{\"sessionId\": \"...\"}" }
               }
             },
@@ -65,7 +65,7 @@
               "name": "Forgot Password",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/forgot-password",
+                "url": "{{quick-hire-url}}/auth/forgot-password",
                 "body": { "mode": "raw", "raw": "{\"email\": \"admin@quickhire.com\"}" }
               }
             },
@@ -73,7 +73,7 @@
               "name": "Reset Password",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/reset-password",
+                "url": "{{quick-hire-url}}/auth/reset-password",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"resetPasswordToken\": \"...\", \"password\": \"NewAdmin123!\"}"
@@ -84,7 +84,7 @@
               "name": "Change Password",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/change-password",
+                "url": "{{quick-hire-url}}/auth/change-password",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -106,7 +106,7 @@
               "name": "Get Admin Stats",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/dashboard/admin",
+                "url": "{{quick-hire-url}}/dashboard/admin",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -124,7 +124,7 @@
               "name": "Get All Users",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/users",
+                "url": "{{quick-hire-url}}/users",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -137,7 +137,7 @@
               "name": "Get User By ID",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/users/:id",
+                "url": "{{quick-hire-url}}/users/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -150,7 +150,7 @@
               "name": "Update User Status",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/users/:id",
+                "url": "{{quick-hire-url}}/users/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -164,7 +164,7 @@
               "name": "Delete User",
               "request": {
                 "method": "DELETE",
-                "url": "{{baseUrl}}/users/:id",
+                "url": "{{quick-hire-url}}/users/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -182,7 +182,7 @@
               "name": "Get All Companies",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/companies",
+                "url": "{{quick-hire-url}}/companies",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -195,7 +195,7 @@
               "name": "Get Company By ID",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/companies/:id",
+                "url": "{{quick-hire-url}}/companies/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -208,7 +208,7 @@
               "name": "Update Company (e.g. Verify)",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/companies/:id",
+                "url": "{{quick-hire-url}}/companies/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -222,7 +222,7 @@
               "name": "Delete Company",
               "request": {
                 "method": "DELETE",
-                "url": "{{baseUrl}}/companies/:id",
+                "url": "{{quick-hire-url}}/companies/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -240,7 +240,7 @@
               "name": "Get All Jobs (Admin View)",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/jobs/admin/all",
+                "url": "{{quick-hire-url}}/jobs/admin/all",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -253,7 +253,7 @@
               "name": "Approve/Reject Job",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/jobs/admin/:id/status",
+                "url": "{{quick-hire-url}}/jobs/admin/:id/status",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -267,7 +267,7 @@
               "name": "Delete Job (Forced)",
               "request": {
                 "method": "DELETE",
-                "url": "{{baseUrl}}/jobs/:id",
+                "url": "{{quick-hire-url}}/jobs/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -290,7 +290,7 @@
               "name": "Register User",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/register",
+                "url": "{{quick-hire-url}}/auth/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"fullName\": \"John Doe\", \"email\": \"john@user.com\", \"password\": \"User1234!\", \"role\": \"USER\"}"
@@ -312,7 +312,7 @@
               ],
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/login",
+                "url": "{{quick-hire-url}}/auth/login",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"email\": \"john@user.com\", \"password\": \"User1234!\"}"
@@ -328,7 +328,7 @@
               "name": "Get My Stats",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/dashboard/user",
+                "url": "{{quick-hire-url}}/dashboard/user",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -341,7 +341,7 @@
               "name": "My Interview Schedule",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/applications/interviews",
+                "url": "{{quick-hire-url}}/applications/interviews",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -359,7 +359,7 @@
               "name": "Get My Profile",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/users/profile/me",
+                "url": "{{quick-hire-url}}/users/profile/me",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -372,7 +372,7 @@
               "name": "Update Profile",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/users/profile/me",
+                "url": "{{quick-hire-url}}/users/profile/me",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -390,16 +390,19 @@
         {
           "name": "Jobs & Applications",
           "item": [
-            { "name": "Browse Jobs", "request": { "method": "GET", "url": "{{baseUrl}}/jobs" } },
+            {
+              "name": "Browse Jobs",
+              "request": { "method": "GET", "url": "{{quick-hire-url}}/jobs" }
+            },
             {
               "name": "Get Job Details",
-              "request": { "method": "GET", "url": "{{baseUrl}}/jobs/:id" }
+              "request": { "method": "GET", "url": "{{quick-hire-url}}/jobs/:id" }
             },
             {
               "name": "Apply for Job",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/applications/job/:jobId",
+                "url": "{{quick-hire-url}}/applications/job/:jobId",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -416,7 +419,7 @@
               "name": "My Applications",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/applications/my",
+                "url": "{{quick-hire-url}}/applications/my",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -429,7 +432,7 @@
               "name": "Toggle Saved Job",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/saved-jobs/:jobId",
+                "url": "{{quick-hire-url}}/saved-jobs/:jobId",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -442,7 +445,7 @@
               "name": "Get Saved Jobs",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/saved-jobs",
+                "url": "{{quick-hire-url}}/saved-jobs",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -465,7 +468,7 @@
               "name": "Unified Register (With Company)",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/register",
+                "url": "{{quick-hire-url}}/auth/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"fullName\": \"Employer One\", \"email\": \"recruiter@company.com\", \"password\": \"Company123!\", \"role\": \"COMPANY\", \"companyName\": \"SparkTech\", \"companyIndustry\": \"IT\"}"
@@ -487,7 +490,7 @@
               ],
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/auth/login",
+                "url": "{{quick-hire-url}}/auth/login",
                 "body": {
                   "mode": "raw",
                   "raw": "{\"email\": \"recruiter@company.com\", \"password\": \"Company123!\"}"
@@ -503,7 +506,7 @@
               "name": "Get Company Stats",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/dashboard/company",
+                "url": "{{quick-hire-url}}/dashboard/company",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -516,7 +519,7 @@
               "name": "Our Interview Schedule",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/applications/interviews",
+                "url": "{{quick-hire-url}}/applications/interviews",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -534,7 +537,7 @@
               "name": "Post Job (Auto-Approved)",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/jobs",
+                "url": "{{quick-hire-url}}/jobs",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -551,7 +554,7 @@
               "name": "Update Job",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/jobs/:id",
+                "url": "{{quick-hire-url}}/jobs/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -565,7 +568,7 @@
               "name": "Delete Job",
               "request": {
                 "method": "DELETE",
-                "url": "{{baseUrl}}/jobs/:id",
+                "url": "{{quick-hire-url}}/jobs/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -583,7 +586,7 @@
               "name": "Get Applications for a Job",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/applications/job/:jobId",
+                "url": "{{quick-hire-url}}/applications/job/:jobId",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -596,7 +599,7 @@
               "name": "Shortlist Candidate",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/applications/:id/status",
+                "url": "{{quick-hire-url}}/applications/:id/status",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -610,7 +613,7 @@
               "name": "Schedule Interview (Update Date/Link)",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/applications/schedule/:id",
+                "url": "{{quick-hire-url}}/applications/schedule/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -632,7 +635,7 @@
               "name": "Update Company Details",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/companies/:id",
+                "url": "{{quick-hire-url}}/companies/:id",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
@@ -647,5 +650,7 @@
       ]
     }
   ],
-  "variable": [{ "key": "baseUrl", "value": "http://localhost:5000/api/v1", "type": "string" }]
+  "variable": [
+    { "key": "quick-hire-url", "value": "http://localhost:5000/api/v1", "type": "string" }
+  ]
 }
