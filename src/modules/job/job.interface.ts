@@ -1,4 +1,4 @@
-import { JobStatus, JobType } from '../../../prisma/generated/enums';
+import { JobStatus } from '../../../prisma/generated/enums';
 
 // ── Create Job ─────────────────────────────────────────────────────────────────
 export interface ICreateJobPayload {
@@ -8,28 +8,24 @@ export interface ICreateJobPayload {
   responsibilities?: string;
   salaryRange?: string;
   location?: string;
-  type?: JobType;
+  type?: string;
+  categoryId: string;
   companyId: string;
 }
 
 // ── Update Job ─────────────────────────────────────────────────────────────────
-export interface IUpdateJobPayload {
-  title?: string;
-  description?: string;
-  requirements?: string;
-  responsibilities?: string;
-  salaryRange?: string;
   location?: string;
   type?: string;
-  category?: string;
+  categoryId?: string;
   tags?: string[];
 }
 
 // ── Filter Options (Public) ────────────────────────────────────────────────────
 export interface IJobFilterOptions {
   search?: string;
-  type?: JobType;
+  type?: string;
   location?: string;
+  categoryId?: string;
 }
 
 // ── Admin Filter Options ───────────────────────────────────────────────────────

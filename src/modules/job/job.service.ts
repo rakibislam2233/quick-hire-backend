@@ -53,6 +53,10 @@ const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, un
     { status: 'APPROVED' }, // Only show admin-approved jobs publicly
   ];
 
+  if (filters.categoryId) {
+    andConditions.push({ categoryId: filters.categoryId });
+  }
+
   if (search) {
     andConditions.push({
       OR: [
@@ -76,6 +80,7 @@ const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, un
       orderBy,
       include: {
         company: { select: { id: true, name: true, logo: true, location: true } },
+        category: { select: { id: true, name: true, icon: true } },
         _count: { select: { applications: true } },
       },
     }),
@@ -110,7 +115,10 @@ const getAllJobsForAdmin = async (
       skip,
       take,
       orderBy,
-      include: { company: { select: { id: true, name: true, logo: true } } },
+      include: {
+        company: { select: { id: true, name: true, logo: true } },
+        category: { select: { id: true, name: true } },
+      },
     }),
     database.job.count({ where: whereConditions }),
   ]);
@@ -128,6 +136,7 @@ const getJobById = async (id: string) => {
     where: { id, isDeleted: false },
     include: {
       company: true,
+      category: true,
       _count: { select: { applications: true } },
     },
   });
@@ -148,7 +157,11 @@ const updateJob = async (id: string, creatorId: string, data: IUpdateJobPayload)
     throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to update this job');
   }
 
-  const updated = await database.job.update({ where: { id }, data });
+  const { categoryId, ...updateData } = data;
+  const updated = await database.job.update({
+    where: { id },
+    data: { ...updateData, categoryId },
+  });
 
   await RedisUtils.deleteCache(JOB_CACHE_KEY.DETAIL(id));
   await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.LIST);

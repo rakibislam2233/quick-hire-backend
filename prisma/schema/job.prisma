@@ -7,7 +7,8 @@ model Job {
   salaryRange     String?
   location        String?
   type            String    @default("Full-time") // Matches frontend: Full-time, Part-time, Remote, Contract
-  category        String?
+  categoryId      String?
+  category        Category? @relation("CategoryJobs", fields: [categoryId], references: [id])
   tags            String[]  @default([])
   status          JobStatus @default(PENDING)
   companyId String

@@ -13,6 +13,7 @@ const createJob = z.object({
       .enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERNSHIP', 'FREELANCE'])
       .default('FULL_TIME'),
     companyId: z.string({ error: 'Company ID is required' }).min(1, 'Company ID is required'),
+    categoryId: z.string({ error: 'Category ID is required' }).min(1, 'Category ID is required'),
   }),
 });
 
@@ -26,6 +27,7 @@ const updateJob = z.object({
     salaryRange: z.string().optional(),
     location: z.string().optional(),
     type: z.enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERNSHIP', 'FREELANCE']).optional(),
+    categoryId: z.string().optional(),
   }),
 });
 
