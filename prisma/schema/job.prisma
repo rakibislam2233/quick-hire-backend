@@ -8,7 +8,6 @@ model Job {
   location        String?
   type            JobType   @default(FULL_TIME)
   status          JobStatus @default(PENDING)
-
   companyId String
   company   Company @relation("CompanyJobs", fields: [companyId], references: [id])
 
