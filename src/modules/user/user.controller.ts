@@ -5,7 +5,6 @@ import catchAsync from '../../utils/catchAsync';
 import pick from '../../utils/pick.utils';
 import sendResponse from '../../utils/sendResponse';
 import { UserService } from './user.service';
-import { batchInformationSchema, institutionInfoSchema } from './user.validation';
 
 // Get all users
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
