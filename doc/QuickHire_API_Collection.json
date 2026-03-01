@@ -1,0 +1,677 @@
+{
+  "info": {
+    "_postman_id": "quick-hire-ultimate-v6",
+    "name": "QuickHire Ultimate API Collection",
+    "description": "Complete collection for QuickHire Backend APIs. Includes Job Management, Category Management, Authentication, and User Management with proper validation and authentication.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Admin User\",\n  \"email\": \"admin@quickhire.com\",\n  \"password\": \"Admin123!\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@user.com\",\n  \"password\": \"User1234!\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Company",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Employer One\",\n  \"email\": \"recruiter@company.com\",\n  \"password\": \"Company123!\",\n  \"role\": \"COMPANY\",\n  \"companyName\": \"SparkTech\",\n  \"companyIndustry\": \"IT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const resp = pm.response.json(); if(resp.success) pm.environment.set('adminToken', resp.data.accessToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@quickhire.com\",\n  \"password\": \"Admin123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const resp = pm.response.json(); if(resp.success) pm.environment.set('userToken', resp.data.accessToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@user.com\",\n  \"password\": \"User1234!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Company",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const resp = pm.response.json(); if(resp.success) pm.environment.set('companyToken', resp.data.accessToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"recruiter@company.com\",\n  \"password\": \"Company123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Job Management",
+      "item": [
+        {
+          "name": "Public Endpoints",
+          "item": [
+            {
+              "name": "Get All Jobs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs?search=developer&type=FULL_TIME&location=Dhaka&page=1&limit=10",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs"],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "developer",
+                      "description": "Search in title, description, or company name"
+                    },
+                    {
+                      "key": "type",
+                      "value": "FULL_TIME",
+                      "description": "Job type filter"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Dhaka",
+                      "description": "Location filter"
+                    },
+                    {
+                      "key": "categoryId",
+                      "value": "",
+                      "description": "Category ID filter",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page number"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "createdAt",
+                      "description": "Sort field",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "desc",
+                      "description": "Sort order: asc/desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Job by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/:jobId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", ":jobId"],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Company Endpoints",
+          "item": [
+            {
+              "name": "Create Job",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Senior Software Engineer\",\n  \"description\": \"We are looking for a talented senior software engineer to join our team and help build amazing products.\",\n  \"requirements\": \"5+ years of experience in software development, Strong knowledge of JavaScript/TypeScript, Experience with React and Node.js, Bachelor's degree in Computer Science or related field\",\n  \"responsibilities\": \"Design and develop high-quality software solutions, Collaborate with cross-functional teams, Write clean and maintainable code, Participate in code reviews\",\n  \"salaryRange\": \"$80,000 - $120,000\",\n  \"location\": \"San Francisco, CA\",\n  \"type\": \"FULL_TIME\",\n  \"categoryId\": \"your_category_id_here\",\n  \"companyId\": \"your_company_id_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/jobs",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs"]
+                }
+              }
+            },
+            {
+              "name": "Update Job",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Senior Software Engineer\",\n  \"description\": \"Updated job description...\",\n  \"requirements\": \"Updated requirements...\",\n  \"responsibilities\": \"Updated responsibilities...\",\n  \"salaryRange\": \"$90,000 - $130,000\",\n  \"location\": \"Remote\",\n  \"type\": \"PART_TIME\",\n  \"categoryId\": \"new_category_id_here\",\n  \"tags\": [\"react\", \"nodejs\", \"typescript\", \"remote\"]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/:jobId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", ":jobId"],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Job",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/:jobId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", ":jobId"],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin Endpoints",
+          "item": [
+            {
+              "name": "Get All Jobs (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin/all?search=engineer&status=PENDING&page=1&limit=10",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin", "all"],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "engineer",
+                      "description": "Search in title"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PENDING",
+                      "description": "Job status filter: APPROVED/REJECTED/CLOSED/PENDING"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page number"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Items per page"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Job Status",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"APPROVED\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/admin/:jobId/status",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", "admin", ":jobId", "status"],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Job (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/jobs/:jobId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["jobs", ":jobId"],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Category Management",
+      "item": [
+        {
+          "name": "Public Endpoints",
+          "item": [
+            {
+              "name": "Get All Categories",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
+                }
+              }
+            },
+            {
+              "name": "Get Category by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categories/:categoryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", ":categoryId"],
+                  "variable": [
+                    {
+                      "key": "categoryId",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin Endpoints",
+          "item": [
+            {
+              "name": "Create Category",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Data Science\",\n  \"icon\": \"https://example.com/icons/data-science.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
+                }
+              }
+            },
+            {
+              "name": "Update Category",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Data Science & Analytics\",\n  \"icon\": \"https://example.com/icons/data-science-new.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories/:categoryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", ":categoryId"],
+                  "variable": [
+                    {
+                      "key": "categoryId",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Category",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories/:categoryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", ":categoryId"],
+                  "variable": [
+                    {
+                      "key": "categoryId",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/profile/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile (JSON)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Updated\",\n  \"bio\": \"Expert Node.js Developer with 5+ years of experience\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile (Form-Data)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "John Updated",
+                  "type": "text"
+                },
+                {
+                  "key": "bio",
+                  "value": "Expert Node.js Dev",
+                  "type": "text"
+                },
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile", "me"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082/api/v1",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": ["// Global pre-request script", "console.log('Request sent at: ' + new Date());"]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "pm.test('Response time is less than 3000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+          "});"
+        ]
+      }
+    }
+  ]
+}

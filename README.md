@@ -6,7 +6,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=prisma&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
-![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white)
+![BullMQ](https://img.shields.io/badge/BullMQ-000000?style=for-the-badge&logo=BullMQ&logoColor=white)
+![Nodemailer](https://img.shields.io/badge/Nodemailer-000000?style=for-the-badge&logo=Nodemailer&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
 A robust, scalable backend application built with Node.js, TypeScript, and PostgreSQL using Prisma ORM. This application provides a comprehensive foundation for building modern web applications with features like authentication, file uploads, and more.
@@ -193,10 +194,24 @@ Coming soon...
 
 The API follows RESTful conventions and is organized by modules:
 
+### Core Modules
+
 - `/api/v1/auth` - Authentication endpoints
 - `/api/v1/users` - User management endpoints
 - `/api/v1/otp` - OTP management endpoints
 - `/api/v1/files` - File upload endpoints
+
+### Job & Category Modules
+
+- `/api/v1/jobs` - Job management endpoints
+- `/api/v1/categories` - Category management endpoints
+
+### 📖 Detailed API Documentation
+
+For comprehensive API documentation including all endpoints, validation rules, and examples, see:
+
+- **[API Documentation](./postman/API_Documentation.md)** - Complete API reference
+- **[Postman Collection](./postman/QuickHire_API_Collection.json)** - Ready-to-use Postman collection
 
 API documentation is auto-generated and available at `/api-docs` in development mode.
 
