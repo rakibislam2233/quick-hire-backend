@@ -1,6 +1,5 @@
 import colors from 'colors';
 import http from 'http';
-import { Server as SocketIOServer } from 'socket.io';
 import app from './app';
 import config from './config';
 import { closeDB, connectDB } from './config/database.config';
@@ -8,6 +7,7 @@ import { emailConfig } from './config/email.config';
 import { closeRedis, redisClient } from './config/redis.config';
 import logger from './utils/logger';
 import { seedDatabase } from './utils/seed.utils';
+import './workers/email.worker'; // Import worker to start it
 
 // Track if shutdown is in progress
 let isShuttingDown = false;
