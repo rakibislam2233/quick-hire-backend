@@ -6,6 +6,8 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { RedisUtils } from '../../utils/redis.utils';
+import { APPLICATION_CACHE_KEY } from './application.cache';
 import { IApplyJobPayload } from './application.interface';
 
 // ── Apply to a Job ────────────────────────────────────────────────────────────

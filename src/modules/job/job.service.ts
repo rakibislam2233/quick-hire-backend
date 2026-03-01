@@ -7,6 +7,8 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { RedisUtils } from '../../utils/redis.utils';
+import { JOB_CACHE_KEY, JOB_CACHE_TTL } from './job.cache';
 import {
   ICreateJobPayload,
   IJobAdminFilterOptions,

@@ -1,7 +1,9 @@
 import { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../utils/ApiError';
+import { RedisUtils } from '../../utils/redis.utils';
 import { uploadFile } from '../../utils/storage.utils';
+import { USER_CACHE_KEY, USER_CACHE_TTL } from './user.cache';
 import { IUpdateMyProfilePayload } from './user.interface';
 import { UserRepository } from './user.repository';
 

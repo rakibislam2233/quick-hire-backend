@@ -7,6 +7,9 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { RedisUtils } from '../../utils/redis.utils';
+import { USER_CACHE_KEY } from '../user/user.cache';
+import { COMPANY_CACHE_KEY, COMPANY_CACHE_TTL } from './company.cache';
 import {
   ICompanyFilterOptions,
   ICreateCompanyPayload,
@@ -58,7 +61,7 @@ const getAllCompanies = async (
   if (Object.keys(filterData).length > 0) {
     andConditions.push(
       ...Object.keys(filterData).map(key => ({
-        [key]: { equals: (filterData as Record<string, unknown>)[key] },
+        [key]: { equals: (filterData as any)[key] },
       }))
     );
   }

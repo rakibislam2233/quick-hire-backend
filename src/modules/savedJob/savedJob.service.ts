@@ -6,6 +6,8 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import { RedisUtils } from '../../utils/redis.utils';
+import { SAVED_JOB_CACHE_KEY } from './savedJob.cache';
 import { IToggleSaveJobResult } from './savedJob.interface';
 
 // ── Toggle Save / Unsave a Job ────────────────────────────────────────────────
