@@ -8,13 +8,7 @@ dotenv.config();
 // Default to Bangladesh timezone if not set
 process.env.TZ = process.env.TZ || 'Asia/Dhaka';
 
-const requiredEnvVars = [
-  'DATABASE_URL',
-  'JWT_ACCESS_SECRET',
-  'JWT_REFRESH_SECRET',
-  'REDIS_HOST',
-  'REDIS_PORT',
-] as const;
+const requiredEnvVars = ['DATABASE_URL', 'JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET'] as const;
 
 const optionalEnvVars = [
   'JWT_RESET_PASSWORD_SECRET',
@@ -143,11 +137,8 @@ const config = {
 
   // Redis
   redis: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-    username: process.env.REDIS_USERNAME || undefined,
-    password: process.env.REDIS_PASSWORD || undefined,
-    db: parseInt(process.env.REDIS_DB || '0', 10),
+    url: process.env.UPSTASH_REDIS_REST_URL || '',
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
   },
 
   // Security & Rate Limiting

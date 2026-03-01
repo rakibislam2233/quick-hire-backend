@@ -7,7 +7,6 @@ import { emailConfig } from './config/email.config';
 import { closeRedis, redisClient } from './config/redis.config';
 import logger from './utils/logger';
 import { seedDatabase } from './utils/seed.utils';
-import './workers/email.worker'; // Import worker to start it
 
 // Track if shutdown is in progress
 let isShuttingDown = false;
@@ -296,17 +295,13 @@ async function main() {
 
     // Step 2: Connect to Redis
     logger.info(colors.cyan('📦 [2/5] Connecting to Redis...'));
-    await new Promise(resolve => {
-      if (redisClient.status === 'ready') {
-        logger.info(colors.green('   ✅ Redis already connected'));
-        resolve(true);
-      } else {
-        redisClient.once('ready', () => {
-          logger.info(colors.green('   ✅ Redis connected successfully'));
-          resolve(true);
-        });
-      }
-    });
+    try {
+      await redisClient.ping();
+      logger.info(colors.green('   ✅ Redis connected successfully'));
+    } catch (error) {
+      logger.error(colors.red('   ❌ Redis connection failed:'), error);
+      throw error;
+    }
 
     // Step 3: Verify Email Service (optional)
     if (config.email.username && config.email.password) {

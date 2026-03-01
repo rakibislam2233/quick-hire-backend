@@ -9,6 +9,7 @@ model User {
   role            UserRole   @default(USER)
   status          UserStatus @default(ACTIVE)
   isEmailVerified Boolean    @default(false)
+  
   // Company relationship (if user belongs to a company)
   companyId String?
   company   Company? @relation(fields: [companyId], references: [id])

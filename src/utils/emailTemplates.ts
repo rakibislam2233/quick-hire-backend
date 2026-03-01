@@ -1,4 +1,4 @@
-import { addEmailToQueue } from '../queues/email.queue';
+import { sendEmail } from './sendEmail';
 
 const generateProfessionalEmailTemplate = (
   content: string,
@@ -293,7 +293,7 @@ export const sendWelcomeEmail = async (to: string, name: string): Promise<void> 
     preheader: `Hi ${name}, your career journey starts now with QuickHire!`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 export const sendVerificationEmail = async (to: string, otp: string): Promise<void> => {
@@ -309,7 +309,7 @@ export const sendVerificationEmail = async (to: string, otp: string): Promise<vo
     preheader: `Your verification code: ${otp}`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 export const sendResetPasswordEmail = async (to: string, otp: string): Promise<void> => {
@@ -325,7 +325,7 @@ export const sendResetPasswordEmail = async (to: string, otp: string): Promise<v
     preheader: `Your reset code: ${otp}`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 // ──────────────────────────────────────────────
@@ -355,7 +355,7 @@ export const sendPendingCompanyRegistrationEmail = async (
     preheader: `Your company registration for ${companyName} is under review`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 export const sendCompanyRegistrationApprovedEmail = async (
@@ -384,7 +384,7 @@ export const sendCompanyRegistrationApprovedEmail = async (
     preheader: `Your company ${companyName} has been approved on QuickHire.`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 export const sendCompanyRegistrationRejectedEmail = async (
@@ -415,7 +415,7 @@ export const sendCompanyRegistrationRejectedEmail = async (
     preheader: `Action required for your company profile on QuickHire.`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
 
 // ──────────────────────────────────────────────
@@ -447,5 +447,5 @@ export const sendUserCreatedEmail = async (
     preheader: `Your account has been created by ${adminName}`,
   });
 
-  await addEmailToQueue({ to, subject, html });
+  await sendEmail({ to, subject, html });
 };
