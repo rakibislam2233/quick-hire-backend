@@ -325,8 +325,6 @@ export const sendResetPasswordEmail = async (to: string, otp: string): Promise<v
   await addEmailToQueue({ to, subject, html });
 };
 
-  await addEmailToQueue({ to, subject, html });
-};
 
 // ──────────────────────────────────────────────
 // Company Registration Emails

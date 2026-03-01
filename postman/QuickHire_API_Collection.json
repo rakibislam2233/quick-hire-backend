@@ -1,236 +1,277 @@
 {
   "info": {
-    "_postman_id": "quick-hire-backend-collection",
-    "name": "Quick Hire API",
+    "_postman_id": "quick-hire-v2",
+    "name": "QuickHire Professional API",
+    "description": "Comprehensive API collection for QuickHire job portal, organized by Admin, User, and Company roles.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Auth",
+      "name": "Admin",
       "item": [
         {
-          "name": "Register",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"Password123!\",\n    \"phoneNumber\": \"+1234567890\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.success) {",
+                      "    pm.environment.set(\"quick-hire-admintoken\", response.data.accessToken);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
                 }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"admin@quickhire.com\",\n    \"password\": \"Admin123!\"\n}"
+                },
+                "url": "{{baseUrl}}/auth/login"
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/auth/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "register"]
+            {
+              "name": "Logout",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admintoken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/auth/logout"
+              }
             }
-          }
+          ]
         },
         {
-          "name": "Login User",
-          "event": [
+          "name": "Users",
+          "item": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "if (jsonData.data && jsonData.data.accessToken) {",
-                  "    pm.environment.set(\"quick-hire-usertoken\", jsonData.data.accessToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"Password123!\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+              "name": "Get All Users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admintoken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users"
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+            {
+              "name": "Get User By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/:id"
+              }
             }
-          }
+          ]
         },
         {
-          "name": "Login Admin",
-          "event": [
+          "name": "Company",
+          "item": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "if (jsonData.data && jsonData.data.accessToken) {",
-                  "    pm.environment.set(\"quick-hire-admintoken\", jsonData.data.accessToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"admin@quickhire.com\",\n    \"password\": \"Admin123!\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+              "name": "Get All Companies",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/companies"
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+            {
+              "name": "Delete Company",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/companies/:id"
+              }
             }
-          }
+          ]
         },
         {
-          "name": "Login Company",
-          "event": [
+          "name": "Job",
+          "item": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "if (jsonData.data && jsonData.data.accessToken) {",
-                  "    pm.environment.set(\"quick-hire-companytoken\", jsonData.data.accessToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"hr@techcorp.com\",\n    \"password\": \"Company123!\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+              "name": "Get All Jobs (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/jobs/admin/all"
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+            {
+              "name": "Update Job Status",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"APPROVED\"\n}"
+                },
+                "url": "{{baseUrl}}/jobs/admin/:id/status"
+              }
             }
-          }
+          ]
+        },
+        {
+          "name": "Dashboard",
+          "item": [
+            {
+              "name": "Get Admin Stats",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admintoken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/dashboard/admin"
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "User (Job Seeker)",
+      "name": "User",
       "item": [
         {
-          "name": "Get Profile",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-usertoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/user/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["user", "me"]
-            }
-          }
-        },
-        {
-          "name": "Get Jobs (Public/Approved)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/job",
-              "host": ["{{baseUrl}}"],
-              "path": ["job"],
-              "query": [
-                { "key": "search", "value": "developer", "disabled": true },
-                { "key": "page", "value": "1", "disabled": true }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Apply for Job",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-usertoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"resumeUrl\": \"https://dropbox.com/my-resume.pdf\",\n    \"coverLetter\": \"I am excited about this role...\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"Password123!\"\n}"
+                },
+                "url": "{{baseUrl}}/auth/register"
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/application/:jobId",
-              "host": ["{{baseUrl}}"],
-              "path": ["application", ":jobId"],
-              "variable": [{ "key": "jobId", "value": "" }]
+            {
+              "name": "Login User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.success) {",
+                      "    pm.environment.set(\"quick-hire-usertoken\", response.data.accessToken);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"Password123!\"\n}"
+                },
+                "url": "{{baseUrl}}/auth/login"
+              }
+            },
+            {
+              "name": "Verify OTP",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"otp\": \"123456\"\n}"
+                },
+                "url": "{{baseUrl}}/auth/verify-otp"
+              }
             }
-          }
+          ]
         },
         {
-          "name": "Toggle Save Job",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-usertoken}}",
-                  "type": "string"
-                }
-              ]
+          "name": "Jobs",
+          "item": [
+            {
+              "name": "Get Approved Jobs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/jobs"
+              }
             },
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/saved-job/:jobId",
-              "host": ["{{baseUrl}}"],
-              "path": ["saved-job", ":jobId"],
-              "variable": [{ "key": "jobId", "value": "" }]
+            {
+              "name": "Apply for Job",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/applications/job/:jobId"
+              }
+            },
+            {
+              "name": "Toggle Saved Job",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/saved-jobs/:jobId"
+              }
             }
-          }
+          ]
+        },
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Get My Profile",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/profile/me"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dashboard",
+          "item": [
+            {
+              "name": "Get User Stats",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/dashboard/user"
+              }
+            }
+          ]
         }
       ]
     },
@@ -238,173 +279,104 @@
       "name": "Company",
       "item": [
         {
-          "name": "Create Company Profile",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Login Company",
+              "event": [
                 {
-                  "key": "token",
-                  "value": "{{quick-hire-usertoken}}",
-                  "type": "string"
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response.success) {",
+                      "    pm.environment.set(\"quick-hire-companytoken\", response.data.accessToken);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
                 }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"name\": \"Spark Tech\",\n    \"location\": \"Dhaka, Bangladesh\",\n    \"industry\": \"Software Engineering\",\n    \"website\": \"https://sparktech.com\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/auth/login"
               }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/company",
-              "host": ["{{baseUrl}}"],
-              "path": ["company"]
             }
-          }
+          ]
         },
         {
-          "name": "Post a Job",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-companytoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"title\": \"Senior Node.js Developer\",\n    \"description\": \"Join our team to build scalable backends...\",\n    \"requirements\": \"5+ years experience, Prisma, Redis\",\n    \"salaryRange\": \"$2000 - $4000\",\n    \"location\": \"Remote\",\n    \"type\": \"FULL_TIME\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+          "name": "Job",
+          "item": [
+            {
+              "name": "Post New Job",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Software Engineer\",\n    \"description\": \"Join our team...\",\n    \"location\": \"Remote\",\n    \"salaryRange\": \"$80k - $120k\",\n    \"type\": \"FULL_TIME\"\n}"
+                },
+                "url": "{{baseUrl}}/jobs"
               }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/job",
-              "host": ["{{baseUrl}}"],
-              "path": ["job"]
             }
-          }
+          ]
         },
         {
-          "name": "Get Applications for a Job",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-companytoken}}",
-                  "type": "string"
-                }
-              ]
+          "name": "Application",
+          "item": [
+            {
+              "name": "Get Applications for Job",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/applications/job/:jobId"
+              }
             },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/application/:jobId",
-              "host": ["{{baseUrl}}"],
-              "path": ["application", ":jobId"],
-              "variable": [{ "key": "jobId", "value": "" }]
+            {
+              "name": "Update Application Status",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"SHORTLISTED\"\n}"
+                },
+                "url": "{{baseUrl}}/applications/:id/status"
+              }
             }
-          }
+          ]
+        },
+        {
+          "name": "Dashboard",
+          "item": [
+            {
+              "name": "Get Company Stats",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/dashboard/company"
+              }
+            }
+          ]
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
     },
     {
-      "name": "Admin",
-      "item": [
-        {
-          "name": "Get Pending Jobs",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-admintoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/job/admin?status=PENDING",
-              "host": ["{{baseUrl}}"],
-              "path": ["job", "admin"],
-              "query": [{ "key": "status", "value": "PENDING" }]
-            }
-          }
-        },
-        {
-          "name": "Approve Job",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-admintoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"status\": \"APPROVED\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/job/status/:jobId",
-              "host": ["{{baseUrl}}"],
-              "path": ["job", "status", ":jobId"],
-              "variable": [{ "key": "jobId", "value": "" }]
-            }
-          }
-        },
-        {
-          "name": "Get All Users",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{quick-hire-admintoken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/user",
-              "host": ["{{baseUrl}}"],
-              "path": ["user"]
-            }
-          }
-        }
-      ]
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
     }
   ],
   "variable": [
