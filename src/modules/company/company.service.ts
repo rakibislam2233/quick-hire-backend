@@ -7,9 +7,14 @@ import {
   createPaginationResult,
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
+import {
+  ICompanyFilterOptions,
+  ICreateCompanyPayload,
+  IUpdateCompanyPayload,
+} from './company.interface';
 
 // ── Create Company ────────────────────────────────────────────────────────────
-const createCompany = async (userId: string, data: Prisma.CompanyCreateInput) => {
+const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
   // Create the company record
   const company = await database.company.create({ data });
 
@@ -23,7 +28,7 @@ const createCompany = async (userId: string, data: Prisma.CompanyCreateInput) =>
 };
 
 // ── Get All Companies ─────────────────────────────────────────────────────────
-const getAllCompanies = async (filters: any, options: any) => {
+const getAllCompanies = async (filters: ICompanyFilterOptions, options: Record<string, string>) => {
   const paginationOptions = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(paginationOptions);
 
@@ -80,7 +85,7 @@ const getCompanyById = async (id: string) => {
 };
 
 // ── Update Company ────────────────────────────────────────────────────────────
-const updateCompany = async (id: string, data: Prisma.CompanyUpdateInput) => {
+const updateCompany = async (id: string, data: IUpdateCompanyPayload) => {
   const isExist = await database.company.findUnique({ where: { id, isDeleted: false } });
   if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
