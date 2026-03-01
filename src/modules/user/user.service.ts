@@ -127,12 +127,8 @@ const updateMyProfile = async (
     ...(profileImage ? { profileImage } : {}),
   });
 
-  // Update company information if user is COMPANY/ADMIN role and company data is provided
-  if (
-    (existingUser.role === 'COMPANY' || existingUser.role === 'ADMIN') &&
-    payload.company &&
-    existingUser.companyId
-  ) {
+  // Update company information if user is COMPANY role and company data is provided
+  if (existingUser.role === 'COMPANY' && payload.company && existingUser.companyId) {
     // Filter out undefined values
     const companyUpdateData = Object.fromEntries(
       Object.entries(payload.company).filter(([_, value]) => value !== undefined)
