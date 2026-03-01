@@ -34,18 +34,18 @@ const errorTransport = new DailyRotateFile({
   maxSize: '20m',
   maxFiles: '7d', // Automatically delete logs older than 7 days
   level: 'error',
-  format: combine(label({ label: 'Your-CR' }), timestamp(), errors({ stack: true }), myFormat),
+  format: combine(label({ label: 'Quic Hire' }), timestamp(), errors({ stack: true }), myFormat),
 });
 
 // Console Transport
 const consoleTransport = new winston.transports.Console({
-  format: combine(label({ label: 'Your-CR' }), timestamp(), winston.format.colorize(), myFormat),
+  format: combine(label({ label: 'Quic Hire' }), timestamp(), winston.format.colorize(), myFormat),
 });
 
 // General logger with file and console transports
 const logger = winston.createLogger({
   level: 'info',
-  format: combine(label({ label: 'Your-CR' }), timestamp(), myFormat),
+  format: combine(label({ label: 'Quic Hire' }), timestamp(), myFormat),
   transports: [successTransport, consoleTransport, errorTransport],
 });
 

@@ -11,12 +11,6 @@ export const seedDatabase = async (): Promise<void> => {
     // Seed admin user
     await seedAdminUser();
 
-    // Seed default roles
-    await seedRoles();
-
-    // Seed default settings
-    await seedSettings();
-
     logger.info('✅ Database seeding completed successfully');
   } catch (error) {
     logger.error('❌ Database seeding failed:', error);
@@ -27,16 +21,16 @@ export const seedDatabase = async (): Promise<void> => {
 // Seed admin user
 export const seedAdminUser = async (): Promise<void> => {
   const adminExists = await database.user.findUnique({
-    where: { email: 'admin@example.com' },
+    where: { email: 'admin@quickhire.com' },
   });
 
   if (!adminExists) {
-    const hashedPassword = await hashPassword('admin123');
+    const hashedPassword = await hashPassword('Admin123');
 
     await database.user.create({
       data: {
         fullName: 'Admin User',
-        email: 'admin@example.com',
+        email: 'admin@quickhire.com',
         password: hashedPassword,
         isEmailVerified: true,
         phoneNumber: '1234567890',
@@ -50,19 +44,6 @@ export const seedAdminUser = async (): Promise<void> => {
     logger.info('ℹ️  Admin user already exists');
   }
 };
-
-// Seed default roles
-export const seedRoles = async (): Promise<void> => {
-  // This would be implemented based on your role model
-  logger.info('✅ Default roles seeded');
-};
-
-// Seed default settings
-export const seedSettings = async (): Promise<void> => {
-  // This would be implemented based on your settings model
-  logger.info('✅ Default settings seeded');
-};
-
 // Clear database (for development)
 export const clearDatabase = async (): Promise<void> => {
   try {

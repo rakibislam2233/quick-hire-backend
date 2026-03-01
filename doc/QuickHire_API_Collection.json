@@ -62,7 +62,12 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-admin-token', resp.data.accessToken);"
+                      "const resp = pm.response.json();",
+                      "if (resp.success && resp.data) {",
+                      "  pm.environment.set('adminToken', resp.data.accessToken);",
+                      "  pm.environment.set('adminRefreshToken', resp.data.refreshToken);",
+                      "  console.log('✅ Admin tokens saved');",
+                      "}"
                     ],
                     "type": "text/javascript"
                   }
@@ -406,8 +411,8 @@
                   "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"isActive\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", ":id"],
                   "variable": [{ "key": "id", "value": "your_user_id_here" }]
                 }
@@ -419,8 +424,8 @@
                 "method": "DELETE",
                 "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/users/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", ":id"],
                   "variable": [{ "key": "id", "value": "your_user_id_here" }]
                 }
@@ -437,8 +442,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/categories",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories"]
                 }
               }
@@ -449,8 +454,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/categories/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories", ":id"],
                   "variable": [{ "key": "id", "value": "your_category_id_here" }]
                 }
@@ -469,8 +474,8 @@
                   "raw": "{\n  \"name\": \"Data Science\",\n  \"icon\": \"https://example.com/icons/data-science.png\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/categories",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories"]
                 }
               }
@@ -488,8 +493,8 @@
                   "raw": "{\n  \"name\": \"Data Science & Analytics\",\n  \"icon\": \"https://example.com/icons/updated-icon.png\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/categories/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories", ":id"],
                   "variable": [{ "key": "id", "value": "your_category_id_here" }]
                 }
@@ -501,8 +506,8 @@
                 "method": "DELETE",
                 "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/categories/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories", ":id"],
                   "variable": [{ "key": "id", "value": "your_category_id_here" }]
                 }
@@ -519,8 +524,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/dashboard/admin",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/dashboard/admin",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["dashboard", "admin"]
                 }
               }
@@ -536,8 +541,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -555,8 +560,8 @@
                   "raw": "{\n  \"fullName\": \"Admin Updated\",\n  \"bio\": \"System Administrator\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -575,8 +580,8 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -587,8 +592,8 @@
                 "method": "DELETE",
                 "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -613,8 +618,8 @@
                   "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@user.com\",\n  \"password\": \"User1234!\",\n  \"role\": \"USER\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/register",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/register",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "register"]
                 }
               }
@@ -626,7 +631,12 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-user-token', resp.data.accessToken);"
+                      "const resp = pm.response.json();",
+                      "if (resp.success && resp.data) {",
+                      "  pm.environment.set('userToken', resp.data.accessToken);",
+                      "  pm.environment.set('userRefreshToken', resp.data.refreshToken);",
+                      "  console.log('✅ User tokens saved');",
+                      "}"
                     ],
                     "type": "text/javascript"
                   }
@@ -640,8 +650,8 @@
                   "raw": "{\n  \"email\": \"john@user.com\",\n  \"password\": \"User1234!\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/login",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/login",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "login"]
                 }
               }
@@ -656,8 +666,8 @@
                   "raw": "{\n  \"email\": \"john@user.com\",\n  \"otp\": \"123456\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/verify-otp",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/verify-otp",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "verify-otp"]
                 }
               }
@@ -672,8 +682,8 @@
                   "raw": "{\n  \"email\": \"john@user.com\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/resend-otp",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/resend-otp",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "resend-otp"]
                 }
               }
@@ -688,8 +698,8 @@
                   "raw": "{\n  \"email\": \"john@user.com\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/forgot-password",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/forgot-password",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "forgot-password"]
                 }
               }
@@ -704,8 +714,8 @@
                   "raw": "{\n  \"email\": \"john@user.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewUser1234!\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/reset-password",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/reset-password",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "reset-password"]
                 }
               }
@@ -720,8 +730,8 @@
                   "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/refresh-token",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/refresh-token",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "refresh-token"]
                 }
               }
@@ -736,8 +746,8 @@
                   "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/logout",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/logout",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "logout"]
                 }
               }
@@ -755,8 +765,8 @@
                   "raw": "{\n  \"currentPassword\": \"User1234!\",\n  \"newPassword\": \"NewUser1234!\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/auth/change-password",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/auth/change-password",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["auth", "change-password"]
                 }
               }
@@ -772,8 +782,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -791,8 +801,8 @@
                   "raw": "{\n  \"fullName\": \"John Updated\",\n  \"bio\": \"Expert Node.js Developer with 5+ years of experience\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -811,8 +821,8 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -823,8 +833,8 @@
                 "method": "DELETE",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/users/profile/me",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["users", "profile", "me"]
                 }
               }
@@ -840,8 +850,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/categories",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories"]
                 }
               }
@@ -852,8 +862,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/categories/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["categories", ":id"],
                   "variable": [{ "key": "id", "value": "your_category_id_here" }]
                 }
@@ -870,8 +880,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/jobs?search=developer&type=FULL_TIME&location=Dhaka&categoryId=&page=1&limit=10",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/jobs?search=developer&type=FULL_TIME&location=Dhaka&categoryId=&page=1&limit=10",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["jobs"],
                   "query": [
                     {
@@ -905,8 +915,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/jobs/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["jobs", ":id"],
                   "variable": [{ "key": "id", "value": "your_job_id_here" }]
                 }
@@ -923,8 +933,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/companies",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["companies"]
                 }
               }
@@ -935,8 +945,8 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/companies/:id",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/companies/:id",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["companies", ":id"],
                   "variable": [{ "key": "id", "value": "your_company_id_here" }]
                 }
@@ -958,8 +968,8 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/companies",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["companies"]
                 }
               }
@@ -986,8 +996,8 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/applications/job/:jobId",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/applications/job/:jobId",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["applications", "job", ":jobId"],
                   "variable": [{ "key": "jobId", "value": "your_job_id_here" }]
                 }
@@ -999,8 +1009,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/applications/my",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/applications/my",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["applications", "my"]
                 }
               }
@@ -1011,8 +1021,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/applications/interviews",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/applications/interviews",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["applications", "interviews"]
                 }
               }
@@ -1028,8 +1038,8 @@
                 "method": "POST",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/saved-jobs/:jobId",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/saved-jobs/:jobId",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["saved-jobs", ":jobId"],
                   "variable": [{ "key": "jobId", "value": "your_job_id_here" }]
                 }
@@ -1041,8 +1051,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/saved-jobs",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/saved-jobs",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["saved-jobs"]
                 }
               }
@@ -1053,8 +1063,8 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
                 "url": {
-                  "raw": "{{baseUrl}}/dashboard/user",
-                  "host": ["{{baseUrl}}"],
+                  "raw": "{{quick-hire-url}}/dashboard/user",
+                  "host": ["{{quick-hire-url}}"],
                   "path": ["dashboard", "user"]
                 }
               }
@@ -1092,7 +1102,12 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-company-token', resp.data.accessToken);"
+                      "const resp = pm.response.json();",
+                      "if (resp.success && resp.data) {",
+                      "  pm.environment.set('companyToken', resp.data.accessToken);",
+                      "  pm.environment.set('companyRefreshToken', resp.data.refreshToken);",
+                      "  console.log('✅ Company tokens saved');",
+                      "}"
                     ],
                     "type": "text/javascript"
                   }
