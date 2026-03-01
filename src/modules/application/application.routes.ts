@@ -29,4 +29,19 @@ router.patch(
   ApplicationController.updateApplicationStatus
 );
 
+// Company: schedule interview
+router.patch(
+  '/schedule/:id',
+  auth(UserRole.COMPANY),
+  validateRequest(ApplicationValidation.scheduleInterview),
+  ApplicationController.scheduleInterview
+);
+
+// Common: Get upcoming interviews
+router.get(
+  '/interviews',
+  auth(UserRole.USER, UserRole.COMPANY),
+  ApplicationController.getInterviews
+);
+
 export const ApplicationRoutes = router;

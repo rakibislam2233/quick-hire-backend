@@ -67,9 +67,36 @@ const updateApplicationStatus = catchAsync(async (req: Request, res: Response) =
   });
 });
 
+const scheduleInterview = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.user;
+  const id = req.params.id as string;
+  const result = await ApplicationService.scheduleInterview(id, userId, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Interview scheduled successfully',
+    data: result,
+  });
+});
+
+const getInterviews = catchAsync(async (req: Request, res: Response) => {
+  const { userId, role } = req.user;
+  const result = await ApplicationService.getInterviews(userId, role);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Interviews fetched successfully',
+    data: result,
+  });
+});
+
 export const ApplicationController = {
   applyToJob,
   getMyApplications,
   getApplicationsByJob,
   updateApplicationStatus,
+  scheduleInterview,
+  getInterviews,
 };

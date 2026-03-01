@@ -106,9 +106,63 @@ const updateApplicationStatus = async (id: string, companyUserId: string, status
   return result;
 };
 
+// ── Schedule Interview (Company) ──────────────────────────────────────────────
+const scheduleInterview = async (
+  id: string,
+  companyUserId: string,
+  data: { interviewDate: string; interviewLink?: string }
+) => {
+  const application = await database.application.findUnique({
+    where: { id },
+    include: { job: true },
+  });
+
+  if (!application) throw new ApiError(httpStatus.NOT_FOUND, 'Application not found');
+  if (application.job.creatorId !== companyUserId) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to schedule this interview');
+  }
+
+  const result = await database.application.update({
+    where: { id },
+    data: {
+      interviewDate: new Date(data.interviewDate),
+      interviewLink: data.interviewLink,
+      status: 'SCHEDULED',
+    },
+  });
+
+  // Invalidate cache
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.USER_LIST(application.userId));
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.JOB_LIST(application.jobId));
+
+  return result;
+};
+
+// ── Get Interviews (Common) ───────────────────────────────────────────────────
+const getInterviews = async (userId: string, role: string) => {
+  const where: any = { status: 'SCHEDULED', isDeleted: false };
+
+  if (role === 'USER') {
+    where.userId = userId;
+  } else if (role === 'COMPANY') {
+    where.job = { creatorId: userId };
+  }
+
+  return database.application.findMany({
+    where,
+    include: {
+      job: { select: { title: true, company: { select: { name: true, logo: true } } } },
+      user: { select: { fullName: true, email: true, profileImage: true } },
+    },
+    orderBy: { interviewDate: 'asc' },
+  });
+};
+
 export const ApplicationService = {
   applyToJob,
   getMyApplications,
   getApplicationsByJob,
   updateApplicationStatus,
+  scheduleInterview,
+  getInterviews,
 };

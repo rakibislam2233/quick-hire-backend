@@ -24,6 +24,7 @@ enum ApplicationStatus {
   PENDING
   REVIEWING
   SHORTLISTED
+  SCHEDULED
   ACCEPTED
   REJECTED
 }
