@@ -26,6 +26,7 @@ const createJob = async (creatorId: string, data: ICreateJobPayload) => {
     data: {
       ...data,
       creatorId,
+      companyId: user.companyId!,
       status: 'PENDING',
     },
     include: { company: true },
