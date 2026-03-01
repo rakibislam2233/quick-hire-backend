@@ -9,6 +9,7 @@ import {
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
 import { RedisUtils } from '../../utils/redis.utils';
+import { uploadFile } from '../../utils/storage.utils';
 import { USER_CACHE_KEY } from '../user/user.cache';
 import { COMPANY_CACHE_KEY, COMPANY_CACHE_TTL } from './company.cache';
 import {
@@ -18,10 +19,24 @@ import {
 } from './company.interface';
 
 // ── Create Company ────────────────────────────────────────────────────────────
-const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
+const createCompany = async (
+  userId: string,
+  data: ICreateCompanyPayload,
+  file?: Express.Multer.File
+) => {
+  let logo: string | undefined;
+  if (file) {
+    const uploadResult = await uploadFile(
+      file.buffer,
+      'quick-hire/company-logos',
+      `logo_${userId}_${Date.now()}`
+    );
+    logo = uploadResult.secure_url;
+  }
+
   // Create the company record
   const company = await database.company.create({
-    data: { ...data, isVerified: true },
+    data: { ...data, logo: logo || data.logo, isVerified: true },
   });
 
   // Link the creating user to this company and upgrade role to COMPANY
@@ -110,11 +125,28 @@ const getCompanyById = async (id: string) => {
 };
 
 // ── Update Company ────────────────────────────────────────────────────────────
-const updateCompany = async (id: string, data: IUpdateCompanyPayload) => {
+const updateCompany = async (
+  id: string,
+  data: IUpdateCompanyPayload,
+  file?: Express.Multer.File
+) => {
   const isExist = await database.company.findUnique({ where: { id, isDeleted: false } });
   if (!isExist) throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
 
-  const updated = await database.company.update({ where: { id }, data });
+  let logo: string | undefined;
+  if (file) {
+    const uploadResult = await uploadFile(
+      file.buffer,
+      'quick-hire/company-logos',
+      `logo_${id}_${Date.now()}`
+    );
+    logo = uploadResult.secure_url;
+  }
+
+  const updated = await database.company.update({
+    where: { id },
+    data: { ...data, logo: logo || data.logo },
+  });
   await RedisUtils.deleteCache(COMPANY_CACHE_KEY.DETAIL(id));
   await RedisUtils.deleteCachePattern(COMPANY_CACHE_KEY.LIST);
   return updated;

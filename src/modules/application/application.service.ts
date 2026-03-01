@@ -7,11 +7,17 @@ import {
   parsePaginationOptions,
 } from '../../utils/pagination.utils';
 import { RedisUtils } from '../../utils/redis.utils';
+import { uploadFile } from '../../utils/storage.utils';
 import { APPLICATION_CACHE_KEY } from './application.cache';
 import { IApplyJobPayload } from './application.interface';
 
 // ── Apply to a Job ────────────────────────────────────────────────────────────
-const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload) => {
+const applyToJob = async (
+  userId: string,
+  jobId: string,
+  data: IApplyJobPayload,
+  file?: Express.Multer.File
+) => {
   // Check job exists and is approved
   const job = await database.job.findUnique({
     where: { id: jobId, status: 'APPROVED', isDeleted: false },
@@ -22,8 +28,20 @@ const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload)
   const existing = await database.application.findFirst({ where: { jobId, userId } });
   if (existing) throw new ApiError(httpStatus.CONFLICT, 'You have already applied to this job');
 
+  let resumeUrl: string | undefined;
+  if (file) {
+    const uploadResult = await uploadFile(
+      file.buffer,
+      'quick-hire/resumes',
+      `resume_${userId}_${jobId}_${Date.now()}`,
+      'raw',
+      file.mimetype
+    );
+    resumeUrl = uploadResult.secure_url;
+  }
+
   const result = await database.application.create({
-    data: { jobId, userId, ...data, status: 'PENDING' },
+    data: { jobId, userId, ...data, resumeUrl: resumeUrl || data.resumeUrl, status: 'PENDING' },
     include: { job: { select: { id: true, title: true } } },
   });
 

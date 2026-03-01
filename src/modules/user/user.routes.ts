@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserRole } from '../../../prisma/generated/enums';
 import { auth } from '../../middleware/auth.middleware';
 import validateRequest from '../../middleware/validation.middleware';
+import upload from '../../utils/fileUpload.utils';
 import { UserController } from './user.controller';
 import { UserValidations } from './user.validation';
 
@@ -13,6 +14,7 @@ router
   .get(auth(UserRole.ADMIN, UserRole.COMPANY, UserRole.USER), UserController.getUserProfile)
   .patch(
     auth(UserRole.ADMIN, UserRole.COMPANY, UserRole.USER),
+    upload.single('profileImage'),
     validateRequest(UserValidations.updateMyProfile),
     UserController.updateMyProfile
   )

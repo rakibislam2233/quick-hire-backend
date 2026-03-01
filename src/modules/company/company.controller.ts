@@ -8,7 +8,7 @@ import { CompanyService } from './company.service';
 // ── Create Company ────────────────────────────────────────────────────────────
 const createCompany = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
-  const result = await CompanyService.createCompany(userId, req.body);
+  const result = await CompanyService.createCompany(userId, req.body, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -50,7 +50,7 @@ const getCompanyById = catchAsync(async (req: Request, res: Response) => {
 // ── Update Company ────────────────────────────────────────────────────────────
 const updateCompany = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id as string;
-  const result = await CompanyService.updateCompany(id, req.body);
+  const result = await CompanyService.updateCompany(id, req.body, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

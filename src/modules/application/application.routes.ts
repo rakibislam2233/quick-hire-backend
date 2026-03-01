@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserRole } from '../../../prisma/generated/enums';
 import { auth } from '../../middleware/auth.middleware';
 import validateRequest from '../../middleware/validation.middleware';
+import upload from '../../utils/fileUpload.utils';
 import { ApplicationController } from './application.controller';
 import { ApplicationValidation } from './application.validation';
 
@@ -11,6 +12,7 @@ const router = Router();
 router.post(
   '/job/:jobId',
   auth(UserRole.USER),
+  upload.single('resume'),
   validateRequest(ApplicationValidation.applyJob),
   ApplicationController.applyToJob
 );

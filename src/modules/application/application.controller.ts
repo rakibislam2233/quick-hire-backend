@@ -9,7 +9,7 @@ import { ApplicationService } from './application.service';
 const applyToJob = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.user;
   const jobId = req.params.jobId as string;
-  const result = await ApplicationService.applyToJob(userId, jobId, req.body);
+  const result = await ApplicationService.applyToJob(userId, jobId, req.body, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

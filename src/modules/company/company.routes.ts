@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserRole } from '../../../prisma/generated/enums';
 import { auth } from '../../middleware/auth.middleware';
 import validateRequest from '../../middleware/validation.middleware';
+import upload from '../../utils/fileUpload.utils';
 import { CompanyController } from './company.controller';
 import { CompanyValidation } from './company.validation';
 
@@ -15,6 +16,7 @@ router.get('/:id', CompanyController.getCompanyById);
 router.post(
   '/',
   auth(UserRole.USER, UserRole.ADMIN),
+  upload.single('logo'),
   validateRequest(CompanyValidation.createCompany),
   CompanyController.createCompany
 );
@@ -23,6 +25,7 @@ router.post(
 router.patch(
   '/:id',
   auth(UserRole.COMPANY, UserRole.ADMIN),
+  upload.single('logo'),
   validateRequest(CompanyValidation.updateCompany),
   CompanyController.updateCompany
 );
