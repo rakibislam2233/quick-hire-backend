@@ -20,10 +20,12 @@ const toggleSaveJob = async (userId: string, jobId: string): Promise<IToggleSave
   if (existing) {
     // Already saved → unsave
     await database.savedJob.delete({ where: { jobId_userId: { jobId, userId } } });
+    await RedisUtils.deleteCachePattern(SAVED_JOB_CACHE_KEY.USER_LIST(userId));
     return { saved: false };
   } else {
     // Not saved → save
     await database.savedJob.create({ data: { jobId, userId } });
+    await RedisUtils.deleteCachePattern(SAVED_JOB_CACHE_KEY.USER_LIST(userId));
     return { saved: true };
   }
 };

@@ -22,7 +22,7 @@ const createJob = async (creatorId: string, data: ICreateJobPayload) => {
     throw new ApiError(httpStatus.FORBIDDEN, 'You must have a company profile to post a job');
   }
 
-  return database.job.create({
+  const job = await database.job.create({
     data: {
       ...data,
       creatorId,
@@ -31,6 +31,12 @@ const createJob = async (creatorId: string, data: ICreateJobPayload) => {
     },
     include: { company: true },
   });
+
+  // Invalidate job lists
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.LIST);
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.ADMIN_LIST);
+
+  return job;
 };
 
 // ── Get All Approved Jobs (Public) ────────────────────────────────────────────
@@ -112,6 +118,10 @@ const getAllJobsForAdmin = async (
 
 // ── Get Job By ID ─────────────────────────────────────────────────────────────
 const getJobById = async (id: string) => {
+  const cacheKey = JOB_CACHE_KEY.DETAIL(id);
+  const cachedJob = await RedisUtils.getCache<any>(cacheKey);
+  if (cachedJob) return cachedJob;
+
   const job = await database.job.findUnique({
     where: { id, isDeleted: false },
     include: {
@@ -121,6 +131,8 @@ const getJobById = async (id: string) => {
   });
 
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
+
+  await RedisUtils.setCache(cacheKey, job, JOB_CACHE_TTL.DETAIL);
 
   return job;
 };
@@ -134,7 +146,13 @@ const updateJob = async (id: string, creatorId: string, data: IUpdateJobPayload)
     throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to update this job');
   }
 
-  return database.job.update({ where: { id }, data });
+  const updated = await database.job.update({ where: { id }, data });
+
+  await RedisUtils.deleteCache(JOB_CACHE_KEY.DETAIL(id));
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.LIST);
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.ADMIN_LIST);
+
+  return updated;
 };
 
 // ── Update Job Status (Admin only) ────────────────────────────────────────────
@@ -142,7 +160,13 @@ const updateJobStatus = async (id: string, status: string) => {
   const job = await database.job.findUnique({ where: { id } });
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
 
-  return database.job.update({ where: { id }, data: { status: status as any } });
+  const updated = await database.job.update({ where: { id }, data: { status: status as any } });
+
+  await RedisUtils.deleteCache(JOB_CACHE_KEY.DETAIL(id));
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.LIST);
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.ADMIN_LIST);
+
+  return updated;
 };
 
 // ── Soft Delete Job ───────────────────────────────────────────────────────────
@@ -155,7 +179,13 @@ const deleteJob = async (id: string, userId: string, role: string) => {
     throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to delete this job');
   }
 
-  return database.job.update({ where: { id }, data: { isDeleted: true } });
+  const result = await database.job.update({ where: { id }, data: { isDeleted: true } });
+
+  await RedisUtils.deleteCache(JOB_CACHE_KEY.DETAIL(id));
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.LIST);
+  await RedisUtils.deleteCachePattern(JOB_CACHE_KEY.ADMIN_LIST);
+
+  return result;
 };
 
 export const JobService = {

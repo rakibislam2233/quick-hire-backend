@@ -20,10 +20,16 @@ const applyToJob = async (userId: string, jobId: string, data: IApplyJobPayload)
   const existing = await database.application.findFirst({ where: { jobId, userId } });
   if (existing) throw new ApiError(httpStatus.CONFLICT, 'You have already applied to this job');
 
-  return database.application.create({
+  const result = await database.application.create({
     data: { jobId, userId, ...data, status: 'PENDING' },
     include: { job: { select: { id: true, title: true } } },
   });
+
+  // Invalidate application lists
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.USER_LIST(userId));
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.JOB_LIST(jobId));
+
+  return result;
 };
 
 // ── Get My Applications (Job Seeker) ──────────────────────────────────────────
@@ -86,7 +92,16 @@ const updateApplicationStatus = async (id: string, companyUserId: string, status
     throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to update this application');
   }
 
-  return database.application.update({ where: { id }, data: { status: status as any } });
+  const result = await database.application.update({
+    where: { id },
+    data: { status: status as any },
+  });
+
+  // Invalidate application lists
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.USER_LIST(application.userId));
+  await RedisUtils.deleteCachePattern(APPLICATION_CACHE_KEY.JOB_LIST(application.jobId));
+
+  return result;
 };
 
 export const ApplicationService = {
