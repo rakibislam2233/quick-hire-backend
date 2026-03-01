@@ -325,20 +325,6 @@ export const sendResetPasswordEmail = async (to: string, otp: string): Promise<v
   await addEmailToQueue({ to, subject, html });
 };
 
-export const sendOTPEmail = async (to: string, otp: string): Promise<void> => {
-  const subject = 'Your One-Time Password (OTP)';
-  const content = `
-    <h2>Your OTP Code</h2>
-    <p>Use this code to proceed:</p>
-    ${generateOTPSection(otp, 15)}
-    <p style="color:var(--muted); font-size:14px;">If you didn’t request this code, please ignore this email.</p>
-  `;
-
-  const html = generateProfessionalEmailTemplate(content, {
-    title: 'Your OTP Code',
-    preheader: `Your code: ${otp}`,
-  });
-
   await addEmailToQueue({ to, subject, html });
 };
 
@@ -464,57 +450,3 @@ export const sendUserCreatedEmail = async (
   await addEmailToQueue({ to, subject, html });
 };
 
-// ──────────────────────────────────────────────
-// Generic Notification Email Template
-export const getNotificationEmailHtml = (title: string, message: string, type: string): string => {
-  let badgeClass = 'status-badge';
-  let typeLabel = type;
-
-  // Map types to styles and labels
-  switch (type) {
-    case 'NOTICE':
-      badgeClass += ' badge-pending'; // Yellow/Orange
-      typeLabel = 'Notice';
-      break;
-    case 'ASSESSMENT':
-      badgeClass += ' badge-rejected'; // Red (Urgent/Important)
-      typeLabel = 'Assessment';
-      break;
-    case 'JOB_UPDATE':
-      badgeClass += ' badge-approved'; // Green
-      typeLabel = 'Job Update';
-      break;
-    case 'ISSUE':
-      badgeClass += ' badge-rejected';
-      typeLabel = 'Issue Reported';
-      break;
-    default:
-      badgeClass += ' badge-pending';
-      typeLabel = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
-  }
-
-  const content = `
-    <div style="margin-bottom: 24px;">
-      <span class="${badgeClass}">${typeLabel}</span>
-    </div>
-    
-    <p style="font-size: 18px; color: #334155; margin-bottom: 24px;">
-        ${title}
-    </p>
-
-    ${generateHighlightBox(`
-      <p style="margin: 0; white-space: pre-wrap;">${message}</p>
-    `)}
-    
-    <p style="color: #64748B; font-size: 14px; margin-top: 24px;">
-      Log in to your dashboard to view full details and take necessary actions.
-    </p>
-    
-    ${generateButton('View Dashboard', 'https://quick-hire.app/dashboard')}
-  `;
-
-  return generateProfessionalEmailTemplate(content, {
-    title: title,
-    preheader: message.substring(0, 150),
-  });
-};

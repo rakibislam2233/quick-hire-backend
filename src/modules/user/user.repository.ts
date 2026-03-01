@@ -1,4 +1,5 @@
 import { database } from '../../config/database.config';
+import { sendWelcomeEmail } from '../../utils/emailTemplates';
 import {
   createPaginationQuery,
   createPaginationResult,
@@ -116,7 +117,14 @@ const isEmailExists = async (email: string) => {
 };
 
 const setUserEmailVerified = async (email: string) => {
-  return database.user.update({ where: { email }, data: { isEmailVerified: true } });
+  const user = await database.user.update({ where: { email }, data: { isEmailVerified: true } });
+
+  // Send welcome email after verification
+  if (user) {
+    await sendWelcomeEmail(user.email, user.fullName);
+  }
+
+  return user;
 };
 
 export const UserRepository = {

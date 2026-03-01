@@ -2,6 +2,7 @@ import httpStatus from 'http-status-codes';
 import { Prisma } from '../../../prisma/generated/client';
 import { database } from '../../config/database.config';
 import ApiError from '../../utils/ApiError';
+import { sendPendingCompanyRegistrationEmail } from '../../utils/emailTemplates';
 import {
   createPaginationQuery,
   createPaginationResult,
@@ -30,6 +31,12 @@ const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
   // Invalidate user cache and company list
   await RedisUtils.deleteCache(USER_CACHE_KEY.PROFILE(userId));
   await RedisUtils.deleteCachePattern(COMPANY_CACHE_KEY.LIST);
+
+  // Send pending registration email
+  const user = await database.user.findUnique({ where: { id: userId } });
+  if (user) {
+    await sendPendingCompanyRegistrationEmail(user.email, user.fullName, company.name);
+  }
 
   return company;
 };
