@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "quick-hire-v2-final",
-    "name": "QuickHire Professional API v2",
-    "description": "Comprehensive API collection for QuickHire job portal, organized by Admin, User, and Company roles.",
+    "_postman_id": "quick-hire-ultimate-v2",
+    "name": "QuickHire Ultimate API Collection",
+    "description": "100% Exhaustive collection for Admin, Company, and User. Features Unified Registration, Auto-Activation, and Interview Scheduling.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -13,16 +13,24 @@
           "name": "Auth",
           "item": [
             {
-              "name": "Login",
+              "name": "Register Admin",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/auth/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"fullName\": \"Admin User\", \"email\": \"admin@quickhire.com\", \"password\": \"Admin123!\", \"role\": \"ADMIN\"}"
+                }
+              }
+            },
+            {
+              "name": "Login Admin",
               "event": [
                 {
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "const response = pm.response.json();",
-                      "if (response.success) {",
-                      "    pm.environment.set(\"quick-hire-admintoken\", response.data.accessToken);",
-                      "}"
+                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-admintoken', resp.data.accessToken);"
                     ],
                     "type": "text/javascript"
                   }
@@ -30,263 +38,63 @@
               ],
               "request": {
                 "method": "POST",
-                "header": [],
+                "url": "{{baseUrl}}/auth/login",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"email\": \"admin@quickhire.com\",\n    \"password\": \"Admin123!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/login"
+                  "raw": "{\"email\": \"admin@quickhire.com\", \"password\": \"Admin123!\"}"
+                }
               }
             },
             {
-              "name": "Logout",
+              "name": "Verify OTP",
               "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
                 "method": "POST",
-                "header": [],
-                "url": "{{baseUrl}}/auth/logout"
+                "url": "{{baseUrl}}/auth/verify-otp",
+                "body": { "mode": "raw", "raw": "{\"sessionId\": \"...\", \"code\": \"123456\"}" }
+              }
+            },
+            {
+              "name": "Resend OTP",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/auth/resend-otp",
+                "body": { "mode": "raw", "raw": "{\"sessionId\": \"...\"}" }
+              }
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/auth/forgot-password",
+                "body": { "mode": "raw", "raw": "{\"email\": \"admin@quickhire.com\"}" }
+              }
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/auth/reset-password",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"resetPasswordToken\": \"...\", \"password\": \"NewAdmin123!\"}"
+                }
               }
             },
             {
               "name": "Change Password",
               "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
                 "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"oldPassword\": \"Admin123!\",\n    \"newPassword\": \"Admin1234!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/change-password"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Users",
-          "item": [
-            {
-              "name": "Get All Users",
-              "request": {
+                "url": "{{baseUrl}}/auth/change-password",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
                   ]
                 },
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/users?page=1&limit=10&role=USER",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["users"],
-                  "query": [
-                    { "key": "page", "value": "1" },
-                    { "key": "limit", "value": "10" },
-                    { "key": "role", "value": "USER" }
-                  ]
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"oldPassword\": \"Admin123!\", \"newPassword\": \"Admin1234!\"}"
                 }
-              }
-            },
-            {
-              "name": "Get User By ID",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/users/:id"
-              }
-            },
-            {
-              "name": "Update User",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"status\": \"BLOCKED\"\n}"
-                },
-                "url": "{{baseUrl}}/users/:id"
-              }
-            },
-            {
-              "name": "Delete User",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "DELETE",
-                "header": [],
-                "url": "{{baseUrl}}/users/:id"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Company",
-          "item": [
-            {
-              "name": "Get All Companies",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/companies"
-              }
-            },
-            {
-              "name": "Update Company",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"isVerified\": true\n}"
-                },
-                "url": "{{baseUrl}}/companies/:id"
-              }
-            },
-            {
-              "name": "Delete Company",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "DELETE",
-                "header": [],
-                "url": "{{baseUrl}}/companies/:id"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Job",
-          "item": [
-            {
-              "name": "Get All Jobs (Admin)",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/jobs/admin/all"
-              }
-            },
-            {
-              "name": "Update Job Status",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"status\": \"APPROVED\"\n}"
-                },
-                "url": "{{baseUrl}}/jobs/admin/:id/status"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Profile",
-          "item": [
-            {
-              "name": "Get My Profile",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/users/profile/me"
               }
             }
           ]
@@ -297,108 +105,130 @@
             {
               "name": "Get Admin Stats",
               "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/dashboard/admin",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-admintoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
                   ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/dashboard/admin"
+                }
               }
             }
           ]
         },
         {
-          "name": "Other",
+          "name": "Users",
           "item": [
             {
-              "name": "Refresh Token",
+              "name": "Get All Users",
               "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"refreshToken\": \"...\"\n}"
+                "method": "GET",
+                "url": "{{baseUrl}}/users",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get User By ID",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/users/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update User Status",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/users/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
                 },
-                "url": "{{baseUrl}}/auth/refresh-token"
+                "body": { "mode": "raw", "raw": "{\"status\": \"BLOCKED\"}" }
+              }
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/users/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "User",
-      "item": [
+        },
         {
-          "name": "Auth",
+          "name": "Companies",
           "item": [
             {
-              "name": "Register",
+              "name": "Get All Companies",
               "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"Password123!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/register"
-              }
-            },
-            {
-              "name": "Login",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const response = pm.response.json();",
-                      "if (response.success) {",
-                      "    pm.environment.set(\"quick-hire-usertoken\", response.data.accessToken);",
-                      "}"
-                    ],
-                    "type": "text/javascript"
-                  }
+                "method": "GET",
+                "url": "{{baseUrl}}/companies",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
                 }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"Password123!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/login"
               }
             },
             {
-              "name": "Verify OTP",
+              "name": "Get Company By ID",
               "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"otp\": \"123456\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/verify-otp"
+                "method": "GET",
+                "url": "{{baseUrl}}/companies/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
               }
             },
             {
-              "name": "Resend OTP",
+              "name": "Update Company (e.g. Verify)",
               "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"john@example.com\"\n}"
+                "method": "PATCH",
+                "url": "{{baseUrl}}/companies/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
                 },
-                "url": "{{baseUrl}}/auth/resend-otp"
+                "body": { "mode": "raw", "raw": "{\"isVerified\": true}" }
+              }
+            },
+            {
+              "name": "Delete Company",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/companies/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
               }
             }
           ]
@@ -407,103 +237,117 @@
           "name": "Jobs",
           "item": [
             {
-              "name": "Search Approved Jobs",
+              "name": "Get All Jobs (Admin View)",
               "request": {
                 "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/jobs?search=developer&type=FULL_TIME",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["jobs"],
-                  "query": [
-                    { "key": "search", "value": "developer" },
-                    { "key": "type", "value": "FULL_TIME" }
+                "url": "{{baseUrl}}/jobs/admin/all",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
                   ]
                 }
               }
             },
             {
-              "name": "Get Job Details",
+              "name": "Approve/Reject Job",
               "request": {
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/jobs/:id"
-              }
-            },
-            {
-              "name": "Apply for Job",
-              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/jobs/admin/:id/status",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
                   ]
                 },
+                "body": { "mode": "raw", "raw": "{\"status\": \"APPROVED\"}" }
+              }
+            },
+            {
+              "name": "Delete Job (Forced)",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/jobs/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-admintoken}}", "type": "string" }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User (Candidate)",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Register User",
+              "request": {
                 "method": "POST",
-                "header": [],
+                "url": "{{baseUrl}}/auth/register",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"resumeUrl\": \"https://resume.com/john.pdf\",\n    \"coverLetter\": \"I am 100% interested...\"\n}"
-                },
-                "url": "{{baseUrl}}/applications/job/:jobId"
+                  "raw": "{\"fullName\": \"John Doe\", \"email\": \"john@user.com\", \"password\": \"User1234!\", \"role\": \"USER\"}"
+                }
               }
             },
             {
-              "name": "Get My Applications",
+              "name": "Login User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-usertoken', resp.data.accessToken);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/applications/my"
-              }
-            },
-            {
-              "name": "Toggle Saved Job",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
                 "method": "POST",
-                "header": [],
-                "url": "{{baseUrl}}/saved-jobs/:jobId"
+                "url": "{{baseUrl}}/auth/login",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"email\": \"john@user.com\", \"password\": \"User1234!\"}"
+                }
               }
-            },
+            }
+          ]
+        },
+        {
+          "name": "Dashboard",
+          "item": [
             {
-              "name": "Get Saved Jobs",
+              "name": "Get My Stats",
               "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/dashboard/user",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
                   ]
-                },
+                }
+              }
+            },
+            {
+              "name": "My Interview Schedule",
+              "request": {
                 "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/saved-jobs"
+                "url": "{{baseUrl}}/applications/interviews",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
+                  ]
+                }
               }
             }
           ]
@@ -514,128 +358,97 @@
             {
               "name": "Get My Profile",
               "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/users/profile/me",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
                   ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/users/profile/me"
+                }
               }
             },
             {
               "name": "Update Profile",
               "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
                 "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"fullName\": \"John Updated\",\n    \"bio\": \"New Bio\"\n}"
-                },
-                "url": "{{baseUrl}}/users/profile/me"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Company",
-          "item": [
-            {
-              "name": "Get All Companies",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/companies"
-              }
-            },
-            {
-              "name": "Create Company Profile",
-              "request": {
+                "url": "{{baseUrl}}/users/profile/me",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
                   ]
                 },
-                "method": "POST",
-                "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"Spark Tech\",\n    \"description\": \"Great company\",\n    \"location\": \"NYC\",\n    \"industry\": \"IT\"\n}"
-                },
-                "url": "{{baseUrl}}/companies"
+                  "raw": "{\"fullName\": \"John Updated\", \"bio\": \"Software Engineer\"}"
+                }
               }
             }
           ]
         },
         {
-          "name": "Dashboard",
+          "name": "Jobs & Applications",
           "item": [
+            { "name": "Browse Jobs", "request": { "method": "GET", "url": "{{baseUrl}}/jobs" } },
             {
-              "name": "Get User Stats",
+              "name": "Get Job Details",
+              "request": { "method": "GET", "url": "{{baseUrl}}/jobs/:id" }
+            },
+            {
+              "name": "Apply for Job",
               "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/applications/job/:jobId",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-usertoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
                   ]
                 },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/dashboard/user"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Other",
-          "item": [
-            {
-              "name": "Forgot Password",
-              "request": {
-                "method": "POST",
-                "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"email\": \"john@example.com\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/forgot-password"
+                  "raw": "{\"resumeUrl\": \"...\", \"coverLetter\": \"...\"}"
+                }
               }
             },
             {
-              "name": "Reset Password",
+              "name": "My Applications",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/applications/my",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Toggle Saved Job",
               "request": {
                 "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"otp\": \"123456\",\n    \"newPassword\": \"NewPassword123!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/reset-password"
+                "url": "{{baseUrl}}/saved-jobs/:jobId",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Saved Jobs",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/saved-jobs",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-usertoken}}", "type": "string" }
+                  ]
+                }
               }
             }
           ]
@@ -643,22 +456,30 @@
       ]
     },
     {
-      "name": "Company",
+      "name": "Company (Employer)",
       "item": [
         {
           "name": "Auth",
           "item": [
             {
-              "name": "Login",
+              "name": "Unified Register (With Company)",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/auth/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"fullName\": \"Employer One\", \"email\": \"recruiter@company.com\", \"password\": \"Company123!\", \"role\": \"COMPANY\", \"companyName\": \"SparkTech\", \"companyIndustry\": \"IT\"}"
+                }
+              }
+            },
+            {
+              "name": "Login Company",
               "event": [
                 {
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "const response = pm.response.json();",
-                      "if (response.success) {",
-                      "    pm.environment.set(\"quick-hire-companytoken\", response.data.accessToken);",
-                      "}"
+                      "const resp = pm.response.json(); if(resp.success) pm.environment.set('quick-hire-companytoken', resp.data.accessToken);"
                     ],
                     "type": "text/javascript"
                   }
@@ -666,201 +487,11 @@
               ],
               "request": {
                 "method": "POST",
-                "header": [],
+                "url": "{{baseUrl}}/auth/login",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"email\": \"hr@sparktech.com\",\n    \"password\": \"Company123!\"\n}"
-                },
-                "url": "{{baseUrl}}/auth/login"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Job",
-          "item": [
-            {
-              "name": "Post New Job",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"title\": \"Backend Developer\",\n    \"description\": \"Join us building nestjs apps\",\n    \"location\": \"Remote\",\n    \"salaryRange\": \"$60k - $90k\",\n    \"type\": \"FULL_TIME\"\n}"
-                },
-                "url": "{{baseUrl}}/jobs"
-              }
-            },
-            {
-              "name": "Update My Job",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"title\": \"Senior Backend Developer\"\n}"
-                },
-                "url": "{{baseUrl}}/jobs/:id"
-              }
-            },
-            {
-              "name": "Delete My Job",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "DELETE",
-                "header": [],
-                "url": "{{baseUrl}}/jobs/:id"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Application",
-          "item": [
-            {
-              "name": "Get Applications for a Job",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/applications/job/:jobId"
-              }
-            },
-            {
-              "name": "Update Application Status",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"status\": \"INTERVIEWING\"\n}"
-                },
-                "url": "{{baseUrl}}/applications/:id/status"
-              }
-            }
-          ]
-        },
-        {
-          "name": "User",
-          "item": [
-            {
-              "name": "Get Applicant Profile",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/users/:id"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Jobs",
-          "item": [
-            {
-              "name": "Get All Approved Jobs",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/jobs"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Profile",
-          "item": [
-            {
-              "name": "Get My Company Profile",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/users/profile/me"
-              }
-            },
-            {
-              "name": "Update Company Info",
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "url": "{{baseUrl}}/companies/:id"
+                  "raw": "{\"email\": \"recruiter@company.com\", \"password\": \"Company123!\"}"
+                }
               }
             }
           ]
@@ -871,32 +502,144 @@
             {
               "name": "Get Company Stats",
               "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/dashboard/company",
                 "auth": {
                   "type": "bearer",
                   "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{quick-hire-companytoken}}",
-                      "type": "string"
-                    }
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
                   ]
-                },
+                }
+              }
+            },
+            {
+              "name": "Our Interview Schedule",
+              "request": {
                 "method": "GET",
-                "header": [],
-                "url": "{{baseUrl}}/dashboard/company"
+                "url": "{{baseUrl}}/applications/interviews",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                }
               }
             }
           ]
         },
         {
-          "name": "Other",
+          "name": "Jobs",
           "item": [
             {
-              "name": "Refresh Token",
+              "name": "Post Job (Auto-Approved)",
               "request": {
                 "method": "POST",
-                "header": [],
-                "url": "{{baseUrl}}/auth/refresh-token"
+                "url": "{{baseUrl}}/jobs",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"title\": \"Nodejs Dev\", \"description\": \"Expert required\", \"location\": \"Dhaka\", \"salaryRange\": \"$2k-$4k\", \"type\": \"FULL_TIME\"}"
+                }
+              }
+            },
+            {
+              "name": "Update Job",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/jobs/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                },
+                "body": { "mode": "raw", "raw": "{\"title\": \"Senior Nodejs Dev\"}" }
+              }
+            },
+            {
+              "name": "Delete Job",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/jobs/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Applications & Interviews",
+          "item": [
+            {
+              "name": "Get Applications for a Job",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/applications/job/:jobId",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Shortlist Candidate",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/applications/:id/status",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                },
+                "body": { "mode": "raw", "raw": "{\"status\": \"SHORTLISTED\"}" }
+              }
+            },
+            {
+              "name": "Schedule Interview (Update Date/Link)",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/applications/schedule/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"interviewDate\": \"2026-04-01T10:00:00Z\", \"interviewLink\": \"https://zoom.it/j/123\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Update Company Details",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/companies/:id",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    { "key": "token", "value": "{{quick-hire-companytoken}}", "type": "string" }
+                  ]
+                },
+                "body": { "mode": "raw", "raw": "{\"description\": \"Leading Tech Agency\"}" }
               }
             }
           ]
@@ -904,11 +647,5 @@
       ]
     }
   ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:5000/api/v1",
-      "type": "string"
-    }
-  ]
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:5000/api/v1", "type": "string" }]
 }

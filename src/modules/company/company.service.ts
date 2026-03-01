@@ -20,7 +20,9 @@ import {
 // ── Create Company ────────────────────────────────────────────────────────────
 const createCompany = async (userId: string, data: ICreateCompanyPayload) => {
   // Create the company record
-  const company = await database.company.create({ data });
+  const company = await database.company.create({
+    data: { ...data, isVerified: true },
+  });
 
   // Link the creating user to this company and upgrade role to COMPANY
   await database.user.update({

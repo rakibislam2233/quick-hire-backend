@@ -7,6 +7,9 @@ export interface IRegisterPayload {
   password: string;
   phoneNumber?: string;
   role?: UserRole;
+  companyName?: string;
+  companyLocation?: string;
+  companyIndustry?: string;
 }
 
 export interface ILoginPayload {

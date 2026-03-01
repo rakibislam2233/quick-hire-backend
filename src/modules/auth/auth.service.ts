@@ -44,13 +44,34 @@ const register = async (payload: IRegisterPayload) => {
   // 3. Hash password
   const hashedPassword = await hashPassword(password);
 
-  // 4. Create user
-  const result = await UserRepository.createAccount({
-    fullName,
-    email,
-    phoneNumber,
-    password: hashedPassword,
-    role,
+  // 4. Create user and company in a transaction if role is COMPANY
+  const result = await database.$transaction(async tx => {
+    // Determine if we need to create a company
+    let companyId: string | undefined;
+    if (role === UserRole.COMPANY && payload.companyName) {
+      const company = await tx.company.create({
+        data: {
+          name: payload.companyName,
+          location: payload.companyLocation,
+          industry: payload.companyIndustry,
+          isVerified: true, // Auto-verified as requested
+        },
+      });
+      companyId = company.id;
+    }
+
+    const newUser = await tx.user.create({
+      data: {
+        fullName,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        role,
+        companyId,
+      },
+    });
+
+    return newUser;
   });
 
   // 5. Create OTP session for email verification

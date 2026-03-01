@@ -14,6 +14,9 @@ const register = z.object({
       .string({ error: 'Password is required and must be a string' })
       .min(8, 'Password must be at least 8 characters long'),
     role: z.enum(['USER', 'COMPANY']).optional().default('USER'),
+    companyName: z.string().optional(),
+    companyLocation: z.string().optional(),
+    companyIndustry: z.string().optional(),
   }),
 });
 

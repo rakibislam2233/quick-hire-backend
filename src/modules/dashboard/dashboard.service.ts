@@ -45,12 +45,13 @@ const getCompanyStats = async (userId: string): Promise<ICompanyStats> => {
 };
 
 const getUserStats = async (userId: string): Promise<IUserStats> => {
-  const [totalApplications, savedJobs] = await Promise.all([
+  const [totalApplications, savedJobs, interviewsScheduled] = await Promise.all([
     database.application.count({ where: { userId, isDeleted: false } }),
     database.savedJob.count({ where: { userId } }),
+    database.application.count({ where: { userId, status: 'SCHEDULED', isDeleted: false } }),
   ]);
 
-  return { totalApplications, savedJobs, interviewsScheduled: 0 };
+  return { totalApplications, savedJobs, interviewsScheduled };
 };
 
 export const DashboardService = {
