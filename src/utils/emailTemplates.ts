@@ -41,14 +41,17 @@ const generateProfessionalEmailTemplate = (
 
     .logo-section {
       text-align: center;
-      padding: 32px 20px;
+      padding: 32px 20px 10px;
       background: #FFFFFF;
     }
 
-    .logo-section img {
-      height: 48px;
-      width: auto;
-      display: inline-block;
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      color: #4640DE;
+      letter-spacing: -1px;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
     }
 
     .content {
@@ -86,10 +89,10 @@ const generateProfessionalEmailTemplate = (
 
     .highlight-box {
       background: #F1F5F9;
-      padding: 24px;
-      margin: 24px 0;
-      border-radius: 12px;
-      font-size: 15px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      font-size: 14px;
     }
 
     .highlight-box strong {
@@ -205,7 +208,7 @@ const generateProfessionalEmailTemplate = (
           <!-- Logo -->
           <tr>
             <td class="logo-section">
-              <img src="${logoUrl}" alt="QuickHire Logo">
+              <div class="logo-text">QuickHire</div>
             </td>
           </tr>
 
@@ -324,7 +327,6 @@ export const sendResetPasswordEmail = async (to: string, otp: string): Promise<v
 
   await addEmailToQueue({ to, subject, html });
 };
-
 
 // ──────────────────────────────────────────────
 // Company Registration Emails
@@ -447,4 +449,3 @@ export const sendUserCreatedEmail = async (
 
   await addEmailToQueue({ to, subject, html });
 };
-
