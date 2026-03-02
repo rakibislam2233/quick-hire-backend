@@ -3,7 +3,7 @@ import { IAdminStats, ICompanyStats, IGraphData, IUserStats } from './dashboard.
 
 const getAdminStats = async (): Promise<IAdminStats> => {
   const [totalUsers, totalCompanies, totalJobs, totalApplications] = await Promise.all([
-    database.user.count({ where: { isDeleted: false } }),
+    database.user.count({ where: { isDeleted: false, role: 'USER' } }),
     database.company.count({ where: { isDeleted: false } }),
     database.job.count({ where: { isDeleted: false } }),
     database.application.count({ where: { isDeleted: false } }),
@@ -11,6 +11,8 @@ const getAdminStats = async (): Promise<IAdminStats> => {
 
   return { totalUsers, totalCompanies, totalJobs, totalApplications };
 };
+
+const recentRegistrations = async () => {};
 
 const getAdminChartData = async (): Promise<IGraphData[]> => {
   // Mocking 7 days of job post activity for the chart
