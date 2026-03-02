@@ -1,5 +1,3 @@
-// This file combines all schema files for proper Prisma v7 compatibility
-
 generator client {
   provider = "prisma-client"
   output   = "../generated"

@@ -33,12 +33,10 @@ const getUserProfile = async (userId: string) => {
           logo: true,
           location: true,
           industry: true,
-          contactEmail: true,
-          contactPhone: true,
-          isVerified: true,
-          founded: true,
-          employeeSize: true,
-          openPositions: true,
+          size: true,
+          foundedYear: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
       return { ...userWithoutPassword, company };
@@ -66,12 +64,10 @@ const getUserProfile = async (userId: string) => {
         logo: true,
         location: true,
         industry: true,
-        contactEmail: true,
-        contactPhone: true,
-        isVerified: true,
-        founded: true,
-        employeeSize: true,
-        openPositions: true,
+        size: true,
+        foundedYear: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
     return { ...userWithoutPassword, company };

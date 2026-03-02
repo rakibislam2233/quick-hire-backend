@@ -1,0 +1,2797 @@
+{
+  "info": {
+    "_postman_id": "2933bf54-d372-4bd0-b960-bf93f01562b7",
+    "name": "QuickHire API Collection",
+    "description": "Complete API collection for QuickHire Backend organized by user roles (Admin, User, Company). Base URL: http://localhost:8082/api/v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40943280",
+    "_collection_link": "https://go.postman.co/collection/40943280-2933bf54-d372-4bd0-b960-bf93f01562b7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "👨‍💼 Admin",
+      "item": [
+        {
+          "name": "🔐 Auth",
+          "item": [
+            {
+              "name": "Register Admin",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Admin User\",\n  \"email\": \"admin@quickhire.com\",\n  \"password\": \"Admin123!\",\n  \"role\": \"ADMIN\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/register",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login Admin",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "try {\r",
+                      "    // Check if the response contains the expected structure\r",
+                      "    if (!response.data || !response.data.tokens || !response.data.tokens.accessToken) {\r",
+                      "        throw new Error(\"Access token not found in response. Response structure: \" + JSON.stringify(response));\r",
+                      "    }\r",
+                      "    // Extract access token\r",
+                      "    let accessToken = response.data.tokens.accessToken;\r",
+                      "    // Store access token in global variable\r",
+                      "    pm.globals.set(\"quick-hire-admin-token\", accessToken);\r",
+                      "    // Verify the token was set\r",
+                      "    console.log(\"Access token set in global variable: \", pm.globals.get(\"quick-hire-admin-token\"));\r",
+                      "} catch (error) {\r",
+                      "    // Log detailed error\r",
+                      "    console.error(\"Error extracting access token: \", error.message);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@quickhire.com\",\n  \"password\": \"Admin123\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/login",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@quickhire.com\",\n  \"otp\": \"123456\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/verify-otp",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resend OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@quickhire.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/resend-otp",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@quickhire.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/forgot-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@quickhire.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewAdmin123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/reset-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/refresh-token",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/logout",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"currentPassword\": \"Admin123!\",\n  \"newPassword\": \"NewAdmin123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/change-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "💼 Job",
+          "item": [
+            {
+              "name": "Get All Jobs (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/admin/all?search=engineer&status=PENDING&page=1&limit=10",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin",
+                    "all"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "engineer",
+                      "description": "Search in title"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PENDING",
+                      "description": "APPROVED / REJECTED / CLOSED / PENDING"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Job Status (Approve/Reject)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"APPROVED\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/admin/:id/status",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    "admin",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Job (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Job Title\",\n  \"description\": \"Updated description\",\n  \"status\": \"APPROVED\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Job (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "🏢 Company",
+          "item": [
+            {
+              "name": "Get All Companies (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Company by ID (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_company_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Company (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "New Company Name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Technology",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Company description",
+                      "type": "text"
+                    },
+                    {
+                      "key": "website",
+                      "value": "https://company.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Company (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Updated Company Name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "FinTech",
+                      "type": "text"
+                    },
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_company_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Company (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_company_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "👥 Users",
+          "item": [
+            {
+              "name": "Get All Users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User by ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_user_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_user_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_user_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "🏷️ Category",
+          "item": [
+            {
+              "name": "Get All Categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Category by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categories/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Category",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Data Science\",\n  \"icon\": \"https://example.com/icons/data-science.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Category",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Data Science & Analytics\",\n  \"icon\": \"https://example.com/icons/updated-icon.png\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Category",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "📊 Dashboard",
+          "item": [
+            {
+              "name": "Admin Dashboard Stats",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/dashboard/admin",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "dashboard",
+                    "admin"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "👤 Profile",
+          "item": [
+            {
+              "name": "Get My Profile (Admin)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-admin-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (Admin - JSON)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Admin Updated\",\n  \"bio\": \"System Administrator\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (Admin - Form-Data)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "fullName",
+                      "value": "Admin Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bio",
+                      "value": "System Administrator",
+                      "type": "text"
+                    },
+                    {
+                      "key": "profileImage",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete My Profile (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👤 User",
+      "item": [
+        {
+          "name": "🔐 Auth",
+          "item": [
+            {
+              "name": "Register User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Md Rakib Ali\",\n  \"email\": \"rakib2020.tkg@gmail.com\",\n  \"password\": \"Rakib244348\",\n  \"role\": \"USER\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/register",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "try {\r",
+                      "    // Check if the response contains the expected structure\r",
+                      "    if (!response.data || !response.data.tokens || !response.data.tokens.accessToken) {\r",
+                      "        throw new Error(\"Access token not found in response. Response structure: \" + JSON.stringify(response));\r",
+                      "    }\r",
+                      "    // Extract access token\r",
+                      "    let accessToken = response.data.tokens.accessToken;\r",
+                      "    // Store access token in global variable\r",
+                      "    pm.globals.set(\"quick-hire-user-token\", accessToken);\r",
+                      "    // Verify the token was set\r",
+                      "    console.log(\"Access token set in global variable: \", pm.globals.get(\"quick-hire-user-token\"));\r",
+                      "} catch (error) {\r",
+                      "    // Log detailed error\r",
+                      "    console.error(\"Error extracting access token: \", error.message);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"rakib2020.tkg@gmail.com\",\n  \"password\": \"Rakib244348\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/login",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sessionId\": \"a7698794bcf129bc62254fb83bb59bc0b798\",\n  \"code\": \"922338\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/verify-otp",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resend OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john@user.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-otp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john@user.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/forgot-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john@user.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewUser1234!\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh-token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"currentPassword\": \"User1234!\",\n  \"newPassword\": \"NewUser1234!\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/change-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "👤 Profile",
+          "item": [
+            {
+              "name": "Get My Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-user-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (JSON)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"John Updated\",\n  \"bio\": \"Expert Node.js Developer with 5+ years of experience\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (Form-Data)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "fullName",
+                      "value": "John Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bio",
+                      "value": "Expert Node.js Dev",
+                      "type": "text"
+                    },
+                    {
+                      "key": "profileImage",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete My Profile",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "🏷️ Category",
+          "item": [
+            {
+              "name": "Get All Categories",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Category by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/categories/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_category_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "💼 Job",
+          "item": [
+            {
+              "name": "Get All Jobs (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs?search=developer&type=FULL_TIME&location=Dhaka&page=1&limit=10",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "developer",
+                      "description": "Search in title, description, company name"
+                    },
+                    {
+                      "key": "type",
+                      "value": "FULL_TIME",
+                      "description": "FULL_TIME / PART_TIME / CONTRACT / INTERNSHIP"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Dhaka"
+                    },
+                    {
+                      "key": "categoryId",
+                      "value": "",
+                      "description": "Category ID filter",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "createdAt",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "desc",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Job by ID (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "🏢 Company",
+          "item": [
+            {
+              "name": "Get All Companies (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Company by ID (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_company_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Company Profile (User)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "My Company",
+                      "type": "text"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Technology",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Company description here",
+                      "type": "text"
+                    },
+                    {
+                      "key": "website",
+                      "value": "https://mycompany.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/companies",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "companies"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "📋 Application",
+          "item": [
+            {
+              "name": "Apply to Job",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "coverLetter",
+                      "value": "I am very interested in this position...",
+                      "type": "text"
+                    },
+                    {
+                      "key": "resume",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/job/:jobId",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "job",
+                    ":jobId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Applications",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/my",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "my"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Upcoming Interviews",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/interviews",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "interviews"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "🔖 Others",
+          "item": [
+            {
+              "name": "Toggle Save/Unsave Job",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/saved-jobs/:jobId",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "saved-jobs",
+                    ":jobId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Saved Jobs",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/saved-jobs",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "saved-jobs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "User Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/dashboard/user",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "dashboard",
+                    "user"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏢 Company",
+      "item": [
+        {
+          "name": "🔐 Auth",
+          "item": [
+            {
+              "name": "Register Company",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Md Rakib Ali\",\n  \"email\": \"devrakibali@gmail.com\",\n  \"password\": \"Company123!\",\n  \"role\": \"COMPANY\",\n  \"companyName\": \"SparkTech\",\n  \"companyLocation\": \"Dhaka\",\n  \"companyIndustry\": \"IT\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/register",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login Company",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "try {\r",
+                      "    // Check if the response contains the expected structure\r",
+                      "    if (!response.data || !response.data.tokens || !response.data.tokens.accessToken) {\r",
+                      "        throw new Error(\"Access token not found in response. Response structure: \" + JSON.stringify(response));\r",
+                      "    }\r",
+                      "    // Extract access token\r",
+                      "    let accessToken = response.data.tokens.accessToken;\r",
+                      "    // Store access token in global variable\r",
+                      "    pm.globals.set(\"quick-hire-company-token\", accessToken);\r",
+                      "    // Verify the token was set\r",
+                      "    console.log(\"Access token set in global variable: \", pm.globals.get(\"quick-hire-company-token\"));\r",
+                      "} catch (error) {\r",
+                      "    // Log detailed error\r",
+                      "    console.error(\"Error extracting access token: \", error.message);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"devrakibali@gmail.com\",\n  \"password\": \"Company123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/login",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sessionId\": \"54d7f11349a3d27c3e6143bb01b372fd1b79\",\n  \"code\": \"042038\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/verify-otp",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resend OTP",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"recruiter@company.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/resend-otp",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"recruiter@company.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/forgot-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"recruiter@company.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewCompany123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/reset-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/refresh-token",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/logout",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"currentPassword\": \"Company123!\",\n  \"newPassword\": \"NewCompany123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/auth/change-password",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "👤 Profile",
+          "item": [
+            {
+              "name": "Get My Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-company-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (JSON)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Employer Updated\",\n  \"bio\": \"HR Manager at SparkTech\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile (Form-Data)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "fullName",
+                      "value": "Employer Updated",
+                      "type": "text"
+                    },
+                    {
+                      "key": "bio",
+                      "value": "HR Manager",
+                      "type": "text"
+                    },
+                    {
+                      "key": "profileImage",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete My Profile",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/users/profile/me",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "profile",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "💼 Job",
+          "item": [
+            {
+              "name": "Get All Jobs (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs?page=1&limit=10",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Job by ID (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Job",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Senior Software Engineer\",\n  \"description\": \"We are looking for a talented senior software engineer to join our team.\",\n  \"requirements\": \"5+ years of experience in software development, Strong knowledge of JavaScript/TypeScript\",\n  \"responsibilities\": \"Design and develop high-quality software solutions, Write clean and maintainable code\",\n  \"salaryRange\": \"$80,000 - $120,000\",\n  \"location\": \"San Francisco, CA\",\n  \"type\": \"FULL_TIME\",\n  \"categoryId\": \"your_category_id_here\",\n  \"companyId\": \"your_company_id_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Job",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Senior Software Engineer\",\n  \"description\": \"Updated job description\",\n  \"requirements\": \"Updated requirements\",\n  \"responsibilities\": \"Updated responsibilities\",\n  \"salaryRange\": \"$90,000 - $130,000\",\n  \"location\": \"Remote\",\n  \"type\": \"PART_TIME\",\n  \"categoryId\": \"new_category_id_here\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Job",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/jobs/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "jobs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "📋 Application",
+          "item": [
+            {
+              "name": "Get Applications for a Job",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-company-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/job/:jobId",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "job",
+                    ":jobId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "jobId",
+                      "value": "your_job_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Application Status",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"SHORTLISTED\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/:id/status",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_application_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Schedule Interview",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"interviewDate\": \"2025-04-15T10:00:00Z\",\n  \"interviewLink\": \"https://meet.google.com/abc-xyz\",\n  \"interviewNote\": \"Please bring your portfolio\"\n}"
+                },
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/schedule/:id",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "schedule",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "your_application_id_here"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Upcoming Interviews",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{quick-hire-company-token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/applications/interviews",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "applications",
+                    "interviews"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "📊 Dashboard",
+          "item": [
+            {
+              "name": "Company Dashboard Stats",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{companyToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{quick-hire-url}}/dashboard/company",
+                  "host": [
+                    "{{quick-hire-url}}"
+                  ],
+                  "path": [
+                    "dashboard",
+                    "company"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "console.log('Request sent at: ' + new Date());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "pm.test('Response time is less than 3000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+          "});"
+        ]
+      }
+    }
+  ]
+}

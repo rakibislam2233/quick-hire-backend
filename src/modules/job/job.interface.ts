@@ -1,4 +1,4 @@
-import { JobStatus } from '../../../prisma/generated/enums';
+import { JobStatus, JobType } from '../../../prisma/generated/enums';
 
 // ── Create Job ─────────────────────────────────────────────────────────────────
 export interface ICreateJobPayload {
@@ -8,7 +8,7 @@ export interface ICreateJobPayload {
   responsibilities?: string;
   salaryRange?: string;
   location?: string;
-  type?: string;
+  type?: JobType;
   categoryId: string;
   companyId: string;
 }
@@ -21,7 +21,7 @@ export interface IUpdateJobPayload {
   responsibilities?: string;
   salaryRange?: string;
   location?: string;
-  type?: string;
+  type?: JobType;
   categoryId?: string;
   tags?: string[];
 }
@@ -29,7 +29,7 @@ export interface IUpdateJobPayload {
 // ── Filter Options (Public) ────────────────────────────────────────────────────
 export interface IJobFilterOptions {
   search?: string;
-  type?: string;
+  type?: JobType;
   location?: string;
   categoryId?: string;
 }
@@ -38,4 +38,50 @@ export interface IJobFilterOptions {
 export interface IJobAdminFilterOptions {
   search?: string;
   status?: JobStatus;
+}
+
+// ── Job Response Interfaces ─────────────────────────────────────────────────────
+export interface IJobCompany {
+  id: string;
+  name: string;
+  logo?: string;
+  location?: string;
+}
+
+export interface IJobCategory {
+  id: string;
+  name: string;
+  icon?: string;
+}
+
+export interface IJobApplicationCount {
+  applications: number;
+}
+
+export interface IJob {
+  id: string;
+  title: string;
+  description: string;
+  requirements?: string;
+  responsibilities?: string;
+  salary?: string;
+  location: string;
+  type: JobType;
+  status: JobStatus;
+  deadline: Date;
+  companyId: string;
+  categoryId: string;
+  creatorId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  isDeleted: boolean;
+  company?: IJobCompany;
+  category?: IJobCategory;
+  _count?: IJobApplicationCount;
+}
+
+export interface IJobWithDetails extends IJob {
+  company: IJobCompany;
+  category: IJobCategory;
+  _count: IJobApplicationCount;
 }

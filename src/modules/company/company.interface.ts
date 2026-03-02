@@ -6,10 +6,8 @@ export interface ICreateCompanyPayload {
   logo?: string;
   location?: string;
   industry?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  founded?: string;
-  employeeSize?: string;
+  size?: string;
+  foundedYear?: number;
 }
 
 // ── Update Company ─────────────────────────────────────────────────────────────
@@ -20,11 +18,8 @@ export interface IUpdateCompanyPayload {
   logo?: string;
   location?: string;
   industry?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  isVerified?: boolean;
-  founded?: string;
-  employeeSize?: string;
+  size?: string;
+  foundedYear?: number;
 }
 
 // ── Filter Options ─────────────────────────────────────────────────────────────
@@ -32,5 +27,30 @@ export interface ICompanyFilterOptions {
   search?: string;
   location?: string;
   industry?: string;
-  isVerified?: boolean;
+}
+
+// ── Company Response Interfaces ───────────────────────────────────────────────────
+export interface ICompanyJobCount {
+  jobs: number;
+}
+
+export interface ICompany {
+  id: string;
+  name: string;
+  description?: string;
+  website?: string;
+  logo?: string;
+  industry?: string;
+  size?: string;
+  location?: string;
+  foundedYear?: number;
+  ownerId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  isDeleted: boolean;
+  _count?: ICompanyJobCount;
+}
+
+export interface ICompanyWithDetails extends ICompany {
+  _count: ICompanyJobCount;
 }

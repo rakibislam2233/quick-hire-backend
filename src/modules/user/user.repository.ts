@@ -58,7 +58,7 @@ const getAllUsersForAdmin = async (filters: any, options: any): Promise<Paginati
   const pagination = parsePaginationOptions(options);
   const { skip, take, orderBy } = createPaginationQuery(pagination);
 
-  const where: any = { isDeleted: false };
+  const where: any = { isDeleted: false, role: { not: 'ADMIN' } };
 
   if (filters.fullName) where.fullName = { contains: filters.fullName, mode: 'insensitive' };
   if (filters.email) where.email = { contains: filters.email, mode: 'insensitive' };
