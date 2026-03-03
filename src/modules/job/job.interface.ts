@@ -4,13 +4,13 @@ import { JobStatus, JobType } from '../../../prisma/generated/enums';
 export interface ICreateJobPayload {
   title: string;
   description: string;
-  requirements?: string;
-  responsibilities?: string;
-  salaryRange?: string;
-  location?: string;
-  type?: JobType;
+  requirements: string;
+  responsibilities: string;
+  deadline: string;
+  salaryRange: string;
+  location: string;
+  type: JobType;
   categoryId: string;
-  companyId: string;
 }
 
 // ── Update Job ─────────────────────────────────────────────────────────────────
@@ -23,6 +23,7 @@ export interface IUpdateJobPayload {
   location?: string;
   type?: JobType;
   categoryId?: string;
+  deadline?: string;
   tags?: string[];
 }
 

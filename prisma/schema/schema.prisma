@@ -119,15 +119,17 @@ model Category {
 }
 
 model Job {
-  id           String    @id @default(cuid())
-  title        String
-  description  String
-  requirements String
-  salary       String?
-  location     String
-  type         JobType
-  status       JobStatus @default(PENDING)
-  deadline     DateTime
+  id               String    @id @default(cuid())
+  title            String
+  description      String
+  requirements     String
+  responsibilities String
+  salary           String?
+  salaryRange      String?
+  location         String
+  type             JobType
+  status           JobStatus @default(PENDING)
+  deadline         DateTime
 
   // Foreign Keys
   companyId  String

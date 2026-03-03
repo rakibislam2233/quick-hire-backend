@@ -27,6 +27,7 @@ const createJob = async (creatorId: string, data: ICreateJobPayload) => {
   const job = await database.job.create({
     data: {
       ...data,
+      deadline: new Date(data.deadline),
       creatorId,
       companyId: user.companyId!,
       status: 'APPROVED',
@@ -48,10 +49,7 @@ const getAllJobs = async (filters: IJobFilterOptions, options: Record<string, un
 
   const { search, type, location, ...filterData } = filters;
 
-  const andConditions: Prisma.JobWhereInput[] = [
-    { isDeleted: false },
-    { status: 'APPROVED' }, // Only show admin-approved jobs publicly
-  ];
+  const andConditions: Prisma.JobWhereInput[] = [{ isDeleted: false }, { status: 'APPROVED' }];
 
   if (filters.categoryId) {
     andConditions.push({ categoryId: filters.categoryId });
@@ -158,9 +156,14 @@ const updateJob = async (id: string, creatorId: string, data: IUpdateJobPayload)
   }
 
   const { categoryId, ...updateData } = data;
+  const processedData: any = { ...updateData };
+  if (processedData.deadline) {
+    processedData.deadline = new Date(processedData.deadline);
+  }
+
   const updated = await database.job.update({
     where: { id },
-    data: { ...updateData, categoryId },
+    data: { ...processedData, categoryId },
   });
 
   await RedisUtils.deleteCache(JOB_CACHE_KEY.DETAIL(id));
